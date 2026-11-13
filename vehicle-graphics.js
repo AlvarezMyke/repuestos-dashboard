@@ -474,9 +474,35 @@
     const brandColor = BRAND_COLORS[brandKey] || BRAND_COLORS.generic;
     const localPhotoUrl = `assets/vehicles/${slug}.jpg`;
 
-    // Detección automática de foto del repuesto por Número de Pieza
+    // Detección automática y precisa de fotos de repuestos (insensible a mayúsculas/minúsculas y guiones)
+    const KNOWN_PHOTOS = [
+      "05139020AA.jpg","12631044.JPG","18213-65D30.jpg","19161310.JPG","258005660.jpg",
+      "39210 22610.jpg","39210 23710.jpg","39210-23750.jpg","39210-37543.jpg","55236778.JPG",
+      "55566648.jpg","55566650.jpg","56029049AA.jpg","56041212.jpg","89465-02130.jpg",
+      "89465-02150.JPG","89465-02210.jpg","89465-26120.jpg","89465-35680.jpg","89465-39735.jpg",
+      "89465-52370.jpg","89465-52380.jpg","89465-69085.jpg","89465-97404.jpg","89465-B4030.jpg",
+      "89467-04090.jpg","89467-0C050.jpg","89467-12100.JPG","89467-35110.jpg","89467-35120.jpg",
+      "89467-71010.JPG","89467-71020.JPG","89467-72010.jpg","93231759.jpg","9636876580.jpg",
+      "96415639.jpg","96437061.JPG","96864850.jpg","AS55-9F472-AA.jpg","DY1178.jpg",
+      "G628-18-861.jpg","LF63188G1B9U.JPG","LFH1-18-8G1B.jpg","LFH2-18-861A.jpg","LFL7-18-8G1C.jpg",
+      "MD305146.jpg","MD312083.jpg","MR514427.jpg"
+    ];
+
     const cleanPn = String(part.partNumber || '').trim().replace(/[/\\?%*:|"<>]/g, '-');
-    const autoPartPhotoUrl = cleanPn ? `assets/repuestos/${cleanPn}.jpg` : null;
+    const normPn = String(part.partNumber || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    
+    let matchedPhoto = null;
+    if (normPn) {
+      for (const photoFile of KNOWN_PHOTOS) {
+        const normFile = photoFile.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (normFile === normPn) {
+          matchedPhoto = `assets/repuestos/${photoFile}`;
+          break;
+        }
+      }
+    }
+
+    const autoPartPhotoUrl = matchedPhoto || (cleanPn ? `assets/repuestos/${cleanPn}.jpg` : null);
 
     return {
       brand: finalBrand,

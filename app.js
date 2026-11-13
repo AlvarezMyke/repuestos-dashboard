@@ -441,7 +441,7 @@
             <img src="${escapeHtml(veh.customImageUrl || veh.localPhotoUrl)}"
                  alt="${escapeHtml(part.name)}"
                  class="vehicle-real-photo"
-                 onerror="if(this.dataset.fallback !== 'veh') { this.dataset.fallback = 'veh'; this.src = '${escapeHtml(veh.localPhotoUrl)}'; } else { this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex'; }" />
+                 onerror="if(!this.dataset.caseRetry && /\.jpg$/i.test(this.src)) { this.dataset.caseRetry='1'; this.src = this.src.endsWith('.jpg') ? this.src.replace(/\.jpg$/, '.JPG') : this.src.replace(/\.JPG$/, '.jpg'); } else if(this.dataset.fallback !== 'veh') { this.dataset.fallback = 'veh'; this.src = '${escapeHtml(veh.localPhotoUrl)}'; } else { this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex'; }" />
             <div class="vehicle-silhouette-box" title="Vehículo: ${escapeHtml(veh.modelName)}" style="display: none;">${veh.vehicleSilhouetteSvg}</div>
             <button class="card-zoom-btn" type="button" data-zoom-id="${part.id}" title="Ampliar imagen del repuesto">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
@@ -714,6 +714,11 @@
     els.lightboxImg.alt = part.name;
 
     els.lightboxImg.onerror = function () {
+      if (!this.dataset.caseRetry && /\.jpg$/i.test(this.src)) {
+        this.dataset.caseRetry = '1';
+        this.src = this.src.endsWith('.jpg') ? this.src.replace(/\.jpg$/, '.JPG') : this.src.replace(/\.JPG$/, '.jpg');
+        return;
+      }
       if (this.dataset.fallback !== 'veh' && veh.localPhotoUrl && targetSrc !== veh.localPhotoUrl) {
         this.dataset.fallback = 'veh';
         this.src = veh.localPhotoUrl;
@@ -731,6 +736,7 @@
       els.lightboxZoomHint.style.display = 'none';
     };
 
+    delete els.lightboxImg.dataset.caseRetry;
     delete els.lightboxImg.dataset.fallback;
     els.lightboxImg.src = targetSrc;
     els.imageLightboxOverlay.classList.add('open');
