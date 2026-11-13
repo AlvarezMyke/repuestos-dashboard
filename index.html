@@ -70,6 +70,29 @@
     </div>
   </div>
 
+  <!-- Barra Oficial de Tasa BCV y Conversor -->
+  <section class="bcv-ticker-bar" id="bcvTickerBar" aria-label="Tasa Oficial BCV y Pago Móvil">
+    <div class="bcv-ticker-inner">
+      <div class="bcv-pill-group" id="bcvRatePill" role="button" tabindex="0" title="Ver Calculadora y Datos de Pago Móvil">
+        <span class="bcv-badge-icon">🏛️</span>
+        <span class="bcv-title">Tasa Oficial BCV:</span>
+        <strong class="bcv-rate" id="bcvRateDisplay">Cargando...</strong>
+        <span class="bcv-dot"></span>
+        <span class="bcv-updated-text" id="bcvUpdatedText">Oficial</span>
+      </div>
+
+      <div class="bcv-bar-actions">
+        <button id="openPagoMovilBtn" class="btn-bcv-action" type="button" title="Ver datos de Pago Móvil y Calculadora">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <span>Calculadora & Pago Móvil</span>
+        </button>
+        <button id="refreshBcvBtn" class="btn-bcv-refresh" type="button" title="Sincronizar tasa oficial en vivo con el BCV">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.19"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
   <div class="layout">
     <!-- Barra lateral de filtros -->
     <aside id="sidebar" class="sidebar">
@@ -274,6 +297,7 @@
       <div class="admin-tabs">
         <button class="admin-tab active" type="button" data-admin-tab="import">Importar Excel (.xlsx)</button>
         <button class="admin-tab" type="button" data-admin-tab="product">Agregar / Editar Producto</button>
+        <button class="admin-tab" type="button" data-admin-tab="bcv">Tasa BCV & Pago Móvil</button>
         <button class="admin-tab" type="button" data-admin-tab="settings">Respaldo y Clave</button>
       </div>
 
@@ -348,7 +372,51 @@
           </form>
         </div>
 
-        <!-- Tab 3: Respaldo y Clave -->
+        <!-- Tab 3: Tasa BCV y Pago Móvil -->
+        <div id="adminTabBcv" class="admin-tab-pane">
+          <form id="pagoMovilConfigForm" class="admin-grid-form">
+            <h3 class="form-span-2" style="font-size: 0.95rem;">Configuración de Tasa BCV y Cuentas de Pago Móvil</h3>
+            <p class="admin-hint form-span-2">
+              Puedes ajustar la Tasa BCV manualmente si el banco central actualiza la tasa, o sincronizarla con la API oficial. También puedes actualizar los datos de la cuenta receptora de Pago Móvil cuando cambien.
+            </p>
+
+            <label class="form-field">
+              <span>Tasa BCV (Bs. por Dólar) *</span>
+              <input id="adminBcvRateInput" type="number" step="any" required placeholder="Ej. 911.62" />
+            </label>
+
+            <div class="form-field" style="justify-content: flex-end;">
+              <span>&nbsp;</span>
+              <button id="adminSyncBcvLiveBtn" class="btn-secondary-full" type="button">🔄 Obtener Tasa Oficial en Vivo</button>
+            </div>
+
+            <label class="form-field">
+              <span>Banco Receptor *</span>
+              <input id="adminPmBankInput" type="text" required placeholder="Ej. Banco Mercantil (0105)" />
+            </label>
+
+            <label class="form-field">
+              <span>Cédula de Identidad / RIF *</span>
+              <input id="adminPmIdInput" type="text" required placeholder="Ej. 16658322" />
+            </label>
+
+            <label class="form-field">
+              <span>Teléfono de Pago Móvil *</span>
+              <input id="adminPmPhoneInput" type="tel" required placeholder="Ej. 04121051940" />
+            </label>
+
+            <label class="form-field">
+              <span>Titular de la Cuenta *</span>
+              <input id="adminPmHolderInput" type="text" required placeholder="Ej. Maykell Sarmiento" />
+            </label>
+
+            <div class="admin-actions-row form-span-2">
+              <button class="btn-primary-full" type="submit">Guardar configuración de Pago Móvil</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Tab 4: Respaldo y Clave -->
         <div id="adminTabSettings" class="admin-tab-pane">
           <div class="settings-section">
             <h3>Exportar base de datos permanente</h3>
@@ -382,6 +450,149 @@
     </div>
   </div>
 
+  <!-- Modal de Pago Móvil & Calculadora de Tasa BCV -->
+  <div id="pagoMovilOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="pagoMovilTitle">
+    <div class="modal modal-pago-movil">
+      <div class="modal-header">
+        <div class="modal-header-brand">
+          <div class="pago-movil-badge-icon">💳</div>
+          <div>
+            <h2 id="pagoMovilTitle" style="font-size: 1.05rem; font-weight: 800; margin: 0;">Calculadora de Tasa BCV & Pago Móvil</h2>
+            <span style="font-size: 0.76rem; color: var(--text-muted);">Repuestos Eléctricos MJ S.A. · Cotización oficial</span>
+          </div>
+        </div>
+        <button id="closePagoMovilBtn" class="modal-close" type="button" aria-label="Cerrar ventana">✕</button>
+      </div>
+
+      <div class="modal-body pago-movil-modal-body">
+        <!-- Tarjeta de Tasa Oficial -->
+        <div class="bcv-status-card">
+          <div class="bcv-status-header">
+            <div>
+              <span class="bcv-status-tag">TASA OFICIAL BCV</span>
+              <div class="bcv-status-val" id="calcBcvRateValue">911,62 Bs/$</div>
+            </div>
+            <button id="calcSyncBcvBtn" class="btn-sync-pill" type="button" title="Actualizar desde el Banco Central">
+              🔄 Sincronizar
+            </button>
+          </div>
+          <div class="bcv-status-footnote" id="calcBcvDate">Sincronizado con el Banco Central de Venezuela</div>
+        </div>
+
+        <!-- Calculadora Interactiva Bidireccional -->
+        <div class="calc-box">
+          <div class="calc-section-title">
+            <span>🧮 Calculadora Rápida</span>
+          </div>
+          <div class="calc-grid">
+            <div class="calc-field">
+              <label for="calcUsdInput">Monto en Dólares ($)</label>
+              <div class="calc-input-wrapper">
+                <span class="calc-currency-prefix">$</span>
+                <input id="calcUsdInput" type="number" step="any" placeholder="0.00" value="10" />
+              </div>
+            </div>
+            <div class="calc-swap-arrow" aria-hidden="true">⇄</div>
+            <div class="calc-field">
+              <label for="calcBsInput">Monto en Bolívares (Bs.)</label>
+              <div class="calc-input-wrapper">
+                <span class="calc-currency-prefix">Bs.</span>
+                <input id="calcBsInput" type="number" step="any" placeholder="0,00" />
+              </div>
+            </div>
+          </div>
+          <!-- Atajos rápidos de montos -->
+          <div class="calc-presets">
+            <span>Montos rápidos:</span>
+            <button type="button" class="calc-preset-btn" data-usd="5">$5</button>
+            <button type="button" class="calc-preset-btn" data-usd="10">$10</button>
+            <button type="button" class="calc-preset-btn" data-usd="20">$20</button>
+            <button type="button" class="calc-preset-btn" data-usd="50">$50</button>
+            <button type="button" class="calc-preset-btn" data-usd="100">$100</button>
+          </div>
+        </div>
+
+        <!-- Tarjeta de Datos de Pago Móvil Oficiales -->
+        <div class="bank-card">
+          <div class="bank-card-header">
+            <div class="bank-logo-title">
+              <div class="bank-chip"></div>
+              <strong>DATOS DE PAGO MÓVIL</strong>
+            </div>
+            <span class="bank-badge-active">Cuenta Activa</span>
+          </div>
+
+          <div class="bank-card-details">
+            <div class="bank-detail-item">
+              <span class="bank-detail-label">BANCO RECEPTOR</span>
+              <strong class="bank-detail-value" id="pmBankDisplay">Banco Mercantil (0105)</strong>
+            </div>
+
+            <div class="bank-detail-item bank-copyable-item">
+              <div>
+                <span class="bank-detail-label">TELÉFONO</span>
+                <strong class="bank-detail-value mono" id="pmPhoneDisplay">04121051940</strong>
+              </div>
+              <button type="button" class="btn-copy-sm" data-copy-target="pmPhoneDisplay" title="Copiar Teléfono">
+                📋 Copiar
+              </button>
+            </div>
+
+            <div class="bank-detail-item bank-copyable-item">
+              <div>
+                <span class="bank-detail-label">CÉDULA / RIF</span>
+                <strong class="bank-detail-value mono" id="pmIdDisplay">16658322</strong>
+              </div>
+              <button type="button" class="btn-copy-sm" data-copy-target="pmIdDisplay" title="Copiar Cédula">
+                📋 Copiar
+              </button>
+            </div>
+
+            <div class="bank-detail-item">
+              <span class="bank-detail-label">TITULAR DE LA CUENTA</span>
+              <strong class="bank-detail-value" id="pmHolderDisplay">Maykell Sarmiento</strong>
+            </div>
+          </div>
+
+          <div class="bank-card-actions">
+            <button id="copyAllPagoMovilBtn" class="btn-copy-all" type="button">
+              📋 Copiar todos los datos de Pago Móvil
+            </button>
+          </div>
+        </div>
+
+        <!-- Envíos y Horarios -->
+        <div class="store-logistics-box">
+          <div class="logistics-item">
+            <div class="logistics-icon">🚚</div>
+            <div>
+              <strong>Envíos Nacionales:</strong>
+              <span>MRW · ZOOM (Salida 2:10 PM) · TEALCA</span>
+            </div>
+          </div>
+          <div class="logistics-item">
+            <div class="logistics-icon">📍</div>
+            <div>
+              <strong>Retiro en Tienda & Delivery:</strong>
+              <span>Retiro en Tienda Física · Delivery en la Gran Caracas</span>
+            </div>
+          </div>
+          <div class="logistics-item">
+            <div class="logistics-icon">💬</div>
+            <div>
+              <strong>Reportar Pago:</strong>
+              <span>Envía el comprobante al WhatsApp <strong>+584167456111</strong> para despachar tu repuesto.</span>
+            </div>
+          </div>
+        </div>
+
+        <a id="pmNotifyWhatsAppBtn" href="https://wa.me/584167456111?text=Hola,%20acabo%20de%20realizar%20un%20Pago%20M%C3%B3vil.%20Adjunto%20mi%20comprobante." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-full" style="margin-top: 14px;">
+          Notificar Pago por WhatsApp (+584167456111)
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- Panel lateral de carrito / cotización -->
   <div id="cartOverlay" class="drawer-overlay" role="dialog" aria-modal="true" aria-label="Resumen de compra o cotización">
     <div class="drawer">
@@ -406,6 +617,16 @@
           <span>Total C. Venta (+16%)</span>
           <span id="cartTotal">$0.00</span>
         </div>
+        <div class="summary-row bcv-cart-row">
+          <div>
+            <strong style="color: var(--accent); font-size: 0.92rem;">Total en Bolívares (Bs.)</strong>
+            <div style="font-size: 0.7rem; color: var(--text-muted);" id="cartBcvRateLabel">Tasa BCV: 911,62 Bs/$</div>
+          </div>
+          <strong id="cartTotalBs" style="color: var(--accent); font-size: 1.05rem; font-family: var(--font-mono);">Bs. 0,00</strong>
+        </div>
+        <button id="cartOpenPagoMovilBtn" class="btn-secondary-full" style="margin-top: 6px; font-weight: 700; background: #e0f2fe; color: #0369a1; border-color: #bae6fd;" type="button">
+          💳 Ver datos de Pago Móvil para transferir
+        </button>
         <a id="whatsappQuoteLink" href="https://wa.me/584167456111" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-full">
           Enviar cotización por WhatsApp (+584167456111)
         </a>

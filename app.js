@@ -6,8 +6,37 @@
     cart: 'autopartes_cart_v2',
     theme: 'autopartes_theme',
     adminPass: 'autopartes_admin_pass',
-    adminSession: 'autopartes_admin_session'
+    adminSession: 'autopartes_admin_session',
+    bcvRate: 'autopartes_bcv_rate_v1',
+    pagoMovil: 'autopartes_pago_movil_v1'
   };
+
+  const DEFAULT_BCV_RATE = 911.62;
+  const DEFAULT_PAGO_MOVIL = {
+    bank: 'Banco Mercantil (0105)',
+    idNumber: '16658322',
+    phone: '04121051940',
+    holder: 'Maykell Sarmiento'
+  };
+
+  function loadBcvConfig() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.bcvRate);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && Number(parsed.rate) > 0) return parsed;
+      }
+    } catch {}
+    return { rate: DEFAULT_BCV_RATE, date: 'Oficial' };
+  }
+
+  function loadPagoMovilConfig() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.pagoMovil);
+      if (saved) return { ...DEFAULT_PAGO_MOVIL, ...JSON.parse(saved) };
+    } catch {}
+    return { ...DEFAULT_PAGO_MOVIL };
+  }
 
   function cloneData(data) {
     return JSON.parse(JSON.stringify(data));
@@ -69,6 +98,7 @@
     return part && part.inStock && part.priceUsd > 0;
   });
 
+  const bcvConfig = loadBcvConfig();
   const state = {
     search: '',
     quickChip: 'Todos',
@@ -83,7 +113,10 @@
     currentPage: 1,
     cart: validInitialCart,
     theme: localStorage.getItem(STORAGE_KEYS.theme) || 'light',
-    isAdmin: sessionStorage.getItem(STORAGE_KEYS.adminSession) === 'true'
+    isAdmin: sessionStorage.getItem(STORAGE_KEYS.adminSession) === 'true',
+    bcvRate: bcvConfig.rate,
+    bcvDate: bcvConfig.date,
+    pagoMovil: loadPagoMovilConfig()
   };
 
   const els = {
@@ -150,6 +183,7 @@
     adminTabs: document.querySelectorAll('[data-admin-tab]'),
     adminTabImport: document.getElementById('adminTabImport'),
     adminTabProduct: document.getElementById('adminTabProduct'),
+    adminTabBcv: document.getElementById('adminTabBcv'),
     adminTabSettings: document.getElementById('adminTabSettings'),
     excelFileInput: document.getElementById('excelFileInput'),
     importModeSelect: document.getElementById('importModeSelect'),
@@ -190,7 +224,37 @@
     lightboxPriceTax: document.getElementById('lightboxPriceTax'),
     lightboxStockBadge: document.getElementById('lightboxStockBadge'),
     lightboxAddToCartBtn: document.getElementById('lightboxAddToCartBtn'),
-    lightboxWhatsappBtn: document.getElementById('lightboxWhatsappBtn')
+    lightboxWhatsappBtn: document.getElementById('lightboxWhatsappBtn'),
+    // Tasa BCV y Pago Móvil
+    bcvTickerBar: document.getElementById('bcvTickerBar'),
+    bcvRateDisplay: document.getElementById('bcvRateDisplay'),
+    bcvUpdatedText: document.getElementById('bcvUpdatedText'),
+    bcvRatePill: document.getElementById('bcvRatePill'),
+    openPagoMovilBtn: document.getElementById('openPagoMovilBtn'),
+    refreshBcvBtn: document.getElementById('refreshBcvBtn'),
+    pagoMovilOverlay: document.getElementById('pagoMovilOverlay'),
+    closePagoMovilBtn: document.getElementById('closePagoMovilBtn'),
+    calcBcvRateValue: document.getElementById('calcBcvRateValue'),
+    calcBcvDate: document.getElementById('calcBcvDate'),
+    calcSyncBcvBtn: document.getElementById('calcSyncBcvBtn'),
+    calcUsdInput: document.getElementById('calcUsdInput'),
+    calcBsInput: document.getElementById('calcBsInput'),
+    pmBankDisplay: document.getElementById('pmBankDisplay'),
+    pmPhoneDisplay: document.getElementById('pmPhoneDisplay'),
+    pmIdDisplay: document.getElementById('pmIdDisplay'),
+    pmHolderDisplay: document.getElementById('pmHolderDisplay'),
+    copyAllPagoMovilBtn: document.getElementById('copyAllPagoMovilBtn'),
+    cartTotalBs: document.getElementById('cartTotalBs'),
+    cartBcvRateLabel: document.getElementById('cartBcvRateLabel'),
+    cartOpenPagoMovilBtn: document.getElementById('cartOpenPagoMovilBtn'),
+    // Admin BCV y Pago Móvil
+    pagoMovilConfigForm: document.getElementById('pagoMovilConfigForm'),
+    adminBcvRateInput: document.getElementById('adminBcvRateInput'),
+    adminSyncBcvLiveBtn: document.getElementById('adminSyncBcvLiveBtn'),
+    adminPmBankInput: document.getElementById('adminPmBankInput'),
+    adminPmIdInput: document.getElementById('adminPmIdInput'),
+    adminPmPhoneInput: document.getElementById('adminPmPhoneInput'),
+    adminPmHolderInput: document.getElementById('adminPmHolderInput')
   };
 
   let isLightboxZoomed = false;
@@ -209,6 +273,11 @@
 
   function formatMoney(amount) {
     return `$${Number(amount).toFixed(2)}`;
+  }
+
+  function formatBs(amount) {
+    const num = Number(amount) || 0;
+    return `Bs. ${num.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
 
   function showToast(message) {
@@ -469,7 +538,8 @@
               ${
                 hasPrice
                   ? `<span class="price-current">${formatMoney(part.priceUsd)}</span>
-                     <span class="price-sub">C/+16%: ${formatMoney(part.priceTotal)}</span>`
+                     <span class="price-sub">C/+16%: ${formatMoney(part.priceTotal)}</span>
+                     <span class="price-bcv" title="Aprox. a Tasa BCV Oficial">≈ ${formatBs(part.priceTotal * state.bcvRate)}</span>`
                   : `<span class="price-current" style="font-size: 0.95rem; color: var(--warning);">Consultar</span>`
               }
             </div>
@@ -844,6 +914,9 @@
             hasPrice
               ? `<div style="font-size: 0.84rem; color: var(--text-secondary); font-family: var(--font-mono);">
                    Total con 16% (Col. BS/Ref): ${formatMoney(part.priceTotal)}
+                 </div>
+                 <div class="modal-price-bcv">
+                   Equivalente a Tasa BCV: <strong>${formatBs(part.priceTotal * state.bcvRate)}</strong> (Tasa: ${formatBs(state.bcvRate)}/$)
                  </div>`
               : ''
           }
@@ -922,7 +995,10 @@
     if (state.cart.length === 0) {
       return 'Hola, quisiera consultar disponibilidad y precios de repuestos en Repuestos Electricos Para Vehiculos Multimarcas.';
     }
-    const lines = ['*Cotización - Repuestos Electricos Para Vehiculos Multimarcas*'];
+    const lines = [
+      '*Cotización - Repuestos Electricos Para Vehiculos Multimarcas*',
+      `_Tasa Oficial BCV: ${formatBs(state.bcvRate)}/$_\n`
+    ];
     let subtotal = 0;
     let total = 0;
     state.cart.forEach((entry) => {
@@ -930,12 +1006,18 @@
       if (!part) return;
       const lineUsd = part.priceUsd * entry.qty;
       const lineTot = part.priceTotal * entry.qty;
+      const lineBs = lineTot * state.bcvRate;
       subtotal += lineUsd;
       total += lineTot;
-      lines.push(`- ${entry.qty}x [${part.partNumber}] ${part.name} (${part.brand}): ${formatMoney(lineUsd)} | C/+16%: ${formatMoney(lineTot)}`);
+      lines.push(`• ${entry.qty}x [${part.partNumber}] ${part.name} (${part.brand}): ${formatMoney(lineTot)} ≈ ${formatBs(lineBs)}`);
     });
-    lines.push(`Subtotal ($): ${formatMoney(subtotal)}`);
-    lines.push(`Total (+16%): ${formatMoney(total)}`);
+    const totalBs = total * state.bcvRate;
+    lines.push('\n--------------------------------');
+    lines.push(`*Total USD (+16% IVA):* ${formatMoney(total)}`);
+    lines.push(`*Total en Bolívares (BCV):* ${formatBs(totalBs)}`);
+    lines.push('--------------------------------');
+    lines.push(`*Datos Pago Móvil:* ${state.pagoMovil.bank} · Tel: ${state.pagoMovil.phone} · C.I: ${state.pagoMovil.idNumber}`);
+    lines.push('¿Tienen disponibilidad para entrega o despacho inmediato?');
     return lines.join('\n');
   }
 
@@ -998,6 +1080,8 @@
       els.cartSubtotal.textContent = '$0.00';
       els.cartTax.textContent = '$0.00';
       els.cartTotal.textContent = '$0.00';
+      if (els.cartTotalBs) els.cartTotalBs.textContent = 'Bs. 0,00';
+      if (els.cartBcvRateLabel) els.cartBcvRateLabel.textContent = `Tasa Oficial BCV: ${formatBs(state.bcvRate)}/$`;
       return;
     }
 
@@ -1032,6 +1116,7 @@
           <div style="text-align: right;">
             <strong style="font-family: var(--font-mono); font-size: 0.92rem;">${formatMoney(lineUsd)}</strong>
             <div class="price-sub">C/+16%: ${formatMoney(lineTotal)}</div>
+            <div class="price-bcv" style="font-size: 0.72rem;">≈ ${formatBs(lineTotal * state.bcvRate)}</div>
           </div>
         </div>
       `;
@@ -1042,6 +1127,81 @@
     els.cartSubtotal.textContent = formatMoney(subtotal);
     els.cartTax.textContent = formatMoney(taxDiff);
     els.cartTotal.textContent = formatMoney(totalWithTax);
+    if (els.cartTotalBs) {
+      els.cartTotalBs.textContent = formatBs(totalWithTax * state.bcvRate);
+    }
+    if (els.cartBcvRateLabel) {
+      els.cartBcvRateLabel.textContent = `Tasa Oficial BCV: ${formatBs(state.bcvRate)}/$`;
+    }
+  }
+
+  /* ==========================================================================
+     SISTEMA DE TASA OFICIAL BCV Y CALCULADORA DE PAGO MÓVIL
+     ========================================================================== */
+  function updateBcvUI() {
+    const formatted = formatBs(state.bcvRate);
+    if (els.bcvRateDisplay) els.bcvRateDisplay.textContent = `${formatted}/$`;
+    if (els.bcvUpdatedText) els.bcvUpdatedText.textContent = state.bcvDate || 'Oficial';
+    if (els.calcBcvRateValue) els.calcBcvRateValue.textContent = `${formatted} Bs/$`;
+    if (els.calcBcvDate) els.calcBcvDate.textContent = `Sincronizado: ${state.bcvDate || 'Oficial'}`;
+    if (els.cartBcvRateLabel) els.cartBcvRateLabel.textContent = `Tasa Oficial BCV: ${formatted}/$`;
+
+    if (els.pmBankDisplay) els.pmBankDisplay.textContent = state.pagoMovil.bank;
+    if (els.pmPhoneDisplay) els.pmPhoneDisplay.textContent = state.pagoMovil.phone;
+    if (els.pmIdDisplay) els.pmIdDisplay.textContent = state.pagoMovil.idNumber;
+    if (els.pmHolderDisplay) els.pmHolderDisplay.textContent = state.pagoMovil.holder;
+
+    if (els.adminBcvRateInput) els.adminBcvRateInput.value = state.bcvRate;
+    if (els.adminPmBankInput) els.adminPmBankInput.value = state.pagoMovil.bank;
+    if (els.adminPmPhoneInput) els.adminPmPhoneInput.value = state.pagoMovil.phone;
+    if (els.adminPmIdInput) els.adminPmIdInput.value = state.pagoMovil.idNumber;
+    if (els.adminPmHolderInput) els.adminPmHolderInput.value = state.pagoMovil.holder;
+
+    if (els.calcUsdInput && els.calcBsInput) {
+      const usd = parseFloat(els.calcUsdInput.value) || 0;
+      if (usd > 0) {
+        els.calcBsInput.value = (usd * state.bcvRate).toFixed(2);
+      }
+    }
+  }
+
+  async function fetchBcvRate(isManual = false) {
+    if (els.bcvRateDisplay) els.bcvRateDisplay.textContent = 'Consultando...';
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
+      const res = await fetch('https://ve.dolarapi.com/v1/dolares/oficial', { signal: controller.signal });
+      clearTimeout(timeoutId);
+      if (res.ok) {
+        const data = await res.json();
+        const rate = Number(data.promedio);
+        if (rate > 0) {
+          state.bcvRate = rate;
+          state.bcvDate = data.fechaActualizacion
+            ? new Date(data.fechaActualizacion).toLocaleDateString('es-VE')
+            : 'Hoy';
+          localStorage.setItem(STORAGE_KEYS.bcvRate, JSON.stringify({ rate: state.bcvRate, date: state.bcvDate }));
+          updateBcvUI();
+          renderCatalog();
+          renderCart();
+          if (isManual) showToast(`Tasa BCV actualizada: ${formatBs(state.bcvRate)}/$`);
+          return;
+        }
+      }
+    } catch (err) {
+      console.warn('Consulta a BCV API en diferido:', err);
+    }
+    updateBcvUI();
+    if (isManual) showToast(`Tasa actual: ${formatBs(state.bcvRate)}/$`);
+  }
+
+  function openPagoMovilModal() {
+    updateBcvUI();
+    if (els.pagoMovilOverlay) els.pagoMovilOverlay.classList.add('open');
+  }
+
+  function closePagoMovilModal() {
+    if (els.pagoMovilOverlay) els.pagoMovilOverlay.classList.remove('open');
   }
 
   function resetAllFilters() {
@@ -1079,6 +1239,7 @@
     });
     els.adminTabImport.classList.toggle('active', tabName === 'import');
     els.adminTabProduct.classList.toggle('active', tabName === 'product');
+    if (els.adminTabBcv) els.adminTabBcv.classList.toggle('active', tabName === 'bcv');
     els.adminTabSettings.classList.toggle('active', tabName === 'settings');
   }
 
@@ -1627,17 +1788,125 @@
           closeImageLightbox();
           return;
         }
+        closePagoMovilModal();
         closeDetailModal();
         closeLoginModal();
         closeAdminPanel();
         els.cartOverlay.classList.remove('open');
       }
     });
+
+    // Eventos Tasa BCV y Pago Móvil
+    if (els.bcvRatePill) els.bcvRatePill.addEventListener('click', openPagoMovilModal);
+    if (els.openPagoMovilBtn) els.openPagoMovilBtn.addEventListener('click', openPagoMovilModal);
+    if (els.cartOpenPagoMovilBtn) els.cartOpenPagoMovilBtn.addEventListener('click', openPagoMovilModal);
+    if (els.closePagoMovilBtn) els.closePagoMovilBtn.addEventListener('click', closePagoMovilModal);
+    if (els.pagoMovilOverlay) {
+      els.pagoMovilOverlay.addEventListener('click', (e) => {
+        if (e.target === els.pagoMovilOverlay) closePagoMovilModal();
+      });
+    }
+
+    if (els.refreshBcvBtn) {
+      els.refreshBcvBtn.addEventListener('click', () => fetchBcvRate(true));
+    }
+    if (els.calcSyncBcvBtn) {
+      els.calcSyncBcvBtn.addEventListener('click', () => fetchBcvRate(true));
+    }
+
+    // Calculadora interactiva bidireccional
+    if (els.calcUsdInput && els.calcBsInput) {
+      function syncFromUsd() {
+        const usd = parseFloat(els.calcUsdInput.value) || 0;
+        const bs = usd * state.bcvRate;
+        els.calcBsInput.value = bs > 0 ? bs.toFixed(2) : '';
+      }
+
+      function syncFromBs() {
+        const bs = parseFloat(els.calcBsInput.value) || 0;
+        const usd = state.bcvRate > 0 ? bs / state.bcvRate : 0;
+        els.calcUsdInput.value = usd > 0 ? usd.toFixed(2) : '';
+      }
+
+      els.calcUsdInput.addEventListener('input', syncFromUsd);
+      els.calcBsInput.addEventListener('input', syncFromBs);
+
+      document.querySelectorAll('.calc-preset-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const val = btn.dataset.usd;
+          els.calcUsdInput.value = val;
+          syncFromUsd();
+        });
+      });
+    }
+
+    // Botones de copiado de Pago Móvil
+    document.querySelectorAll('[data-copy-target]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.copyTarget;
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          const text = targetEl.textContent.trim();
+          navigator.clipboard.writeText(text).then(() => {
+            showToast(`¡Copiado: ${text}!`);
+          }).catch(() => {
+            showToast('No se pudo copiar automáticamente');
+          });
+        }
+      });
+    });
+
+    if (els.copyAllPagoMovilBtn) {
+      els.copyAllPagoMovilBtn.addEventListener('click', () => {
+        const text = `DATOS DE PAGO MÓVIL\nBanco: ${state.pagoMovil.bank}\nCédula: ${state.pagoMovil.idNumber}\nTeléfono: ${state.pagoMovil.phone}\nTitular: ${state.pagoMovil.holder}\nTasa BCV: ${formatBs(state.bcvRate)}/$`;
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('¡Datos de Pago Móvil copiados!');
+        }).catch(() => {
+          showToast('No se pudo copiar automáticamente');
+        });
+      });
+    }
+
+    // Admin: Guardar configuración de Pago Móvil y Tasa BCV
+    if (els.pagoMovilConfigForm) {
+      els.pagoMovilConfigForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const customRate = parseFloat(els.adminBcvRateInput.value);
+        if (customRate > 0) {
+          state.bcvRate = customRate;
+          state.bcvDate = 'Manual';
+          localStorage.setItem(STORAGE_KEYS.bcvRate, JSON.stringify({ rate: state.bcvRate, date: state.bcvDate }));
+        }
+
+        state.pagoMovil = {
+          bank: els.adminPmBankInput.value.trim() || DEFAULT_PAGO_MOVIL.bank,
+          idNumber: els.adminPmIdInput.value.trim() || DEFAULT_PAGO_MOVIL.idNumber,
+          phone: els.adminPmPhoneInput.value.trim() || DEFAULT_PAGO_MOVIL.phone,
+          holder: els.adminPmHolderInput.value.trim() || DEFAULT_PAGO_MOVIL.holder
+        };
+        localStorage.setItem(STORAGE_KEYS.pagoMovil, JSON.stringify(state.pagoMovil));
+
+        updateBcvUI();
+        renderCatalog();
+        renderCart();
+        closeAdminPanel();
+        showToast('Configuración de Tasa BCV y Pago Móvil guardada');
+      });
+    }
+
+    if (els.adminSyncBcvLiveBtn) {
+      els.adminSyncBcvLiveBtn.addEventListener('click', async () => {
+        await fetchBcvRate(true);
+        if (els.adminBcvRateInput) els.adminBcvRateInput.value = state.bcvRate;
+      });
+    }
   }
 
   saveCart();
   applyTheme(state.theme);
   updateAdminUI();
+  updateBcvUI();
+  fetchBcvRate();
   refreshFilterControls();
   renderQuickChips();
   renderCategories();
