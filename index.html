@@ -2,8 +2,19 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Repuestos Electricos Para Vehiculos Multimarcas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Repuestos Eléctricos Multimarcas MJ S.A. | Catálogo y Cotizaciones</title>
+  
+  <!-- PWA & Mobile Web App -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Repuestos MJ" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -145,6 +156,14 @@
       </section>
 
       <button id="resetAllBtn" class="reset-filters-btn" type="button">Restablecer todos los filtros</button>
+
+      <div class="pwa-install-box">
+        <button id="pwaInstallBtn" class="btn-pwa-install" type="button">
+          <span class="pwa-icon">📲</span>
+          <span>Instalar App en el Teléfono</span>
+        </button>
+        <span class="pwa-install-hint">Funciona rápido y sin descargar de Play Store</span>
+      </div>
     </aside>
 
     <div id="sidebarBackdrop" class="sidebar-backdrop" aria-hidden="true"></div>

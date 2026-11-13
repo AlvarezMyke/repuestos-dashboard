@@ -3292,3 +3292,149 @@ html, body {
     margin: -4px 0;
   }
 }
+
+/* ==========================================================================
+   TARJETA DE RESCATE CUANDO UN REPUESTO NO APARECE EN BÚSQUEDA
+   ========================================================================== */
+.empty-state-rescue {
+  background: var(--bg-surface);
+  border: 2px dashed #f97316;
+  border-radius: var(--radius-lg);
+  padding: 36px 20px;
+  text-align: center;
+  margin: 16px auto;
+  max-width: 680px;
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.08);
+}
+
+.rescue-badge-icon {
+  font-size: 2.4rem;
+  margin-bottom: 8px;
+  animation: pulseRescue 2s infinite ease-in-out;
+}
+
+@keyframes pulseRescue {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.rescue-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.rescue-desc {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  max-width: 520px;
+  margin: 0 auto 16px;
+}
+
+.rescue-card-action {
+  background: linear-gradient(135deg, rgba(37, 211, 102, 0.08), rgba(16, 185, 129, 0.05));
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  border-radius: var(--radius-md);
+  padding: 18px 16px;
+  max-width: 520px;
+  margin: 0 auto 16px;
+}
+
+.rescue-callout {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+}
+
+.btn-rescue-whatsapp {
+  background: #25D366;
+  color: #ffffff !important;
+  font-size: 0.92rem;
+  font-weight: 800;
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+  transition: all 0.16s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.btn-rescue-whatsapp:hover {
+  background: #1eb956;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(37, 211, 102, 0.4);
+}
+
+.btn-rescue-reset {
+  background: var(--bg-body);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-rescue-reset:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ==========================================================================
+   BOTÓN Y CAJA DE INSTALACIÓN PWA
+   ========================================================================== */
+.pwa-install-box {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.btn-pwa-install {
+  width: 100%;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: #ffffff !important;
+  border: 1px solid rgba(249, 115, 22, 0.6);
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-pwa-install:hover {
+  background: #f97316;
+  border-color: #f97316;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+}
+
+.btn-pwa-install .pwa-icon {
+  font-size: 1.1rem;
+}
+
+.pwa-install-hint {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.25;
+}

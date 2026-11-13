@@ -254,7 +254,9 @@
     adminPmBankInput: document.getElementById('adminPmBankInput'),
     adminPmIdInput: document.getElementById('adminPmIdInput'),
     adminPmPhoneInput: document.getElementById('adminPmPhoneInput'),
-    adminPmHolderInput: document.getElementById('adminPmHolderInput')
+    adminPmHolderInput: document.getElementById('adminPmHolderInput'),
+    // PWA Instalación
+    pwaInstallBtn: document.getElementById('pwaInstallBtn')
   };
 
   let isLightboxZoomed = false;
@@ -708,12 +710,47 @@
     els.catalogContainer.innerHTML = '';
 
     if (filtered.length === 0) {
+      const searchedTerm = (state.search || '').trim();
+      const currentCategory = state.category !== 'all' ? state.category : '';
+      const currentBrand = state.brand !== 'all' ? state.brand : '';
+
+      let subjectDesc = searchedTerm;
+      if (!subjectDesc && currentBrand) subjectDesc = `marca ${currentBrand}`;
+      if (!subjectDesc && currentCategory) subjectDesc = `categoría seleccionada`;
+      if (!subjectDesc) subjectDesc = 'el repuesto solicitado';
+
+      const waRescueText = `Hola, estuve buscando en el catálogo web: "${subjectDesc}" y no me apareció en los resultados. ¿Tienen disponibilidad o me lo pueden cotizar?`;
+
       els.catalogContainer.innerHTML = `
-        <div class="empty-state">
-          <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M8 11h6"/></svg>
-          <h3>No se encontraron repuestos con esos filtros</h3>
-          <p style="font-size: 0.86rem; margin-bottom: 14px;">Prueba limpiando la búsqueda o seleccionando otra categoría.</p>
-          <button id="emptyResetBtn" class="btn-add" type="button">Restablecer búsqueda</button>
+        <div class="empty-state-rescue">
+          <div class="rescue-badge-icon">🔍💬</div>
+          <h3 class="rescue-title">¿No encuentras el repuesto que buscas?</h3>
+          <p class="rescue-desc">
+            ${
+              searchedTerm
+                ? `No encontramos resultados exactos para <strong>"${escapeHtml(searchedTerm)}"</strong> en el catálogo online.`
+                : `No encontramos repuestos con los filtros seleccionados actualmente.`
+            }
+            <br />
+            ¡En tienda <strong>manejamos más de 3.000 repuestos eléctricos</strong> y piezas bajo pedido que no están publicadas aún!
+          </p>
+
+          <div class="rescue-card-action">
+            <p class="rescue-callout">
+              Escríbenos directamente a WhatsApp y un repuestero de nuestro equipo te confirma disponibilidad y precio en minutos:
+            </p>
+            <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waRescueText)}" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               class="btn-rescue-whatsapp">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.47 0 .11 5.36.11 11.95c0 2.11.55 4.17 1.6 5.98L0 24l6.24-1.64a11.9 11.9 0 0 0 5.82 1.49h.01c6.59 0 11.95-5.36 11.95-11.95 0-3.19-1.24-6.19-3.5-8.42zM12.06 21.8h-.01a9.87 9.87 0 0 1-5.04-1.38l-.36-.21-3.7.97.99-3.61-.24-.37a9.86 9.86 0 0 1-1.52-5.25c0-5.45 4.44-9.89 9.89-9.89 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.9 6.99c0 5.46-4.44 9.85-9.9 9.85zm5.42-7.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.21 5.09 4.5.71.31 1.27.49 1.7.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35z"/></svg>
+              <span>Consultar por WhatsApp (+584167456111)</span>
+            </a>
+          </div>
+
+          <button id="emptyResetBtn" class="btn-rescue-reset" type="button">
+            🔄 Ver todos los 896 repuestos disponibles
+          </button>
         </div>
       `;
       document.getElementById('emptyResetBtn').addEventListener('click', resetAllFilters);
@@ -1900,6 +1937,46 @@
         if (els.adminBcvRateInput) els.adminBcvRateInput.value = state.bcvRate;
       });
     }
+
+    // Evento de instalación PWA en el teléfono
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (els.pwaInstallBtn) {
+        els.pwaInstallBtn.classList.add('available');
+      }
+    });
+
+    if (els.pwaInstallBtn) {
+      els.pwaInstallBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) {
+          const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+          if (isIos) {
+            alert('Para instalar en iPhone o iPad: presiona el botón "Compartir" en Safari (icono con la flecha arriba) y selecciona "Añadir a la pantalla de inicio".');
+          } else {
+            showToast('Pulsa el menú de 3 puntos ⋮ en tu navegador y selecciona "Instalar aplicación"');
+          }
+          return;
+        }
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          showToast('¡Catálogo instalado con éxito en tu teléfono!');
+          if (els.pwaInstallBtn) els.pwaInstallBtn.classList.remove('available');
+        }
+        deferredPrompt = null;
+      });
+    }
+  }
+
+  // Registro del Service Worker para funcionamiento como App Móvil PWA
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch((err) => {
+        console.warn('Registro de Service Worker PWA diferido:', err);
+      });
+    });
   }
 
   saveCart();
