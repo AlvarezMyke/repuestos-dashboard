@@ -433,12 +433,11 @@
           </div>
 
           <div class="part-visual-stage" data-zoom-id="${part.id}" title="Clic para ampliar imagen del repuesto">
-            ${
-              veh.customImageUrl
-                ? `<img src="${escapeHtml(veh.customImageUrl)}" alt="${escapeHtml(part.name)}" class="vehicle-real-photo" />`
-                : `<img src="${escapeHtml(veh.localPhotoUrl)}" alt="${escapeHtml(part.name)}" class="vehicle-real-photo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';" />
-                   <div class="vehicle-silhouette-box" title="Vehículo: ${escapeHtml(veh.modelName)}" style="display: none;">${veh.vehicleSilhouetteSvg}</div>`
-            }
+            <img src="${escapeHtml(veh.customImageUrl || veh.localPhotoUrl)}"
+                 alt="${escapeHtml(part.name)}"
+                 class="vehicle-real-photo"
+                 onerror="if(this.dataset.fallback !== 'veh') { this.dataset.fallback = 'veh'; this.src = '${escapeHtml(veh.localPhotoUrl)}'; } else { this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex'; }" />
+            <div class="vehicle-silhouette-box" title="Vehículo: ${escapeHtml(veh.modelName)}" style="display: none;">${veh.vehicleSilhouetteSvg}</div>
             <button class="card-zoom-btn" type="button" data-zoom-id="${part.id}" title="Ampliar imagen del repuesto">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
             </button>
@@ -665,7 +664,7 @@
     isLightboxZoomed = false;
 
     const veh = window.VehicleGraphics.resolveVehicle(part);
-    const targetSrc = part.imageUrl || fallbackImageUrl || veh.localPhotoUrl;
+    const targetSrc = fallbackImageUrl || part.imageUrl || veh.customImageUrl || veh.partPhotoUrl || veh.localPhotoUrl;
     const hasPrice = part.priceUsd > 0;
     const status = getStatusMeta(part);
 
@@ -710,6 +709,11 @@
     els.lightboxImg.alt = part.name;
 
     els.lightboxImg.onerror = function () {
+      if (this.dataset.fallback !== 'veh' && veh.localPhotoUrl && targetSrc !== veh.localPhotoUrl) {
+        this.dataset.fallback = 'veh';
+        this.src = veh.localPhotoUrl;
+        return;
+      }
       els.lightboxImg.style.display = 'none';
       els.lightboxFallback.innerHTML = `
         <div style="text-align: center; padding: 24px;">
@@ -722,6 +726,7 @@
       els.lightboxZoomHint.style.display = 'none';
     };
 
+    delete els.lightboxImg.dataset.fallback;
     els.lightboxImg.src = targetSrc;
     els.imageLightboxOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -793,12 +798,12 @@
           </div>
 
           <div class="modal-vehicle-hero modal-zoomable" id="modalHeroZoomBox" role="button" tabindex="0" title="Haz clic sobre la imagen para abrirla en tamaño completo">
-            ${
-              veh.customImageUrl
-                ? `<img src="${escapeHtml(veh.customImageUrl)}" alt="${escapeHtml(part.name)}" class="vehicle-real-photo" style="max-height:92px;" />`
-                : `<img src="${escapeHtml(veh.localPhotoUrl)}" alt="${escapeHtml(part.name)}" class="vehicle-real-photo" style="max-height:92px;" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';" />
-                   <div style="display:none; align-items:center; justify-content:center; width:100%; height:100%;">${veh.vehicleSilhouetteSvg}</div>`
-            }
+            <img src="${escapeHtml(veh.customImageUrl || veh.localPhotoUrl)}"
+                 alt="${escapeHtml(part.name)}"
+                 class="vehicle-real-photo"
+                 style="max-height:92px;"
+                 onerror="if(this.dataset.fallback !== 'veh') { this.dataset.fallback = 'veh'; this.src = '${escapeHtml(veh.localPhotoUrl)}'; } else { this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex'; }" />
+            <div style="display:none; align-items:center; justify-content:center; width:100%; height:100%;">${veh.vehicleSilhouetteSvg}</div>
             <div class="zoom-pill-overlay">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
               <span>🔍 Clic para ampliar</span>
@@ -1269,7 +1274,8 @@
         const partId = Number(zoomTarget.dataset.zoomId);
         const part = catalogData.items.find((p) => p.id === partId);
         if (part) {
-          openImageLightbox(part);
+          const veh = window.VehicleGraphics.resolveVehicle(part);
+          openImageLightbox(part, veh.customImageUrl || veh.partPhotoUrl || veh.localPhotoUrl);
           return;
         }
       }
