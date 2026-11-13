@@ -7,4 +7,4 @@ Catálogo digital de repuestos eléctricos automotrices para venta al público c
 - **Visor Lightbox HD:** Vista ampliada de imágenes con ultra-zoom (190%) para inspección técnica.
 - **Cotizador WhatsApp:** Generación de cotización automática con cálculo de IVA y enlace directo a WhatsApp.
 - **Panel Administrador:** Actualización de precios, control de existencias e importador directo de archivos Excel (.xlsx).
-- **Despliegue automático:** Optimizado para publicación continua en Netlify mediante `netlify.toml`.
+- **Despliegue automático:** Optimizado para publicación continua en github.
