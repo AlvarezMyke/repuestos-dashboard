@@ -474,6 +474,10 @@
     const brandColor = BRAND_COLORS[brandKey] || BRAND_COLORS.generic;
     const localPhotoUrl = `assets/vehicles/${slug}.jpg`;
 
+    // Detección automática de foto del repuesto por Número de Pieza
+    const cleanPn = String(part.partNumber || '').trim().replace(/[/\\?%*:|"<>]/g, '-');
+    const autoPartPhotoUrl = cleanPn ? `assets/repuestos/${cleanPn}.jpg` : null;
+
     return {
       brand: finalBrand,
       brandKey,
@@ -484,7 +488,8 @@
       brandLogoSvg,
       vehicleSilhouetteSvg,
       localPhotoUrl,
-      customImageUrl: part.imageUrl || null
+      partPhotoUrl: autoPartPhotoUrl,
+      customImageUrl: part.imageUrl || autoPartPhotoUrl
     };
   }
 
