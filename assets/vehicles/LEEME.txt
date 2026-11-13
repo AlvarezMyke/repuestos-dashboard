@@ -1,0 +1,103 @@
+CARPETA DE FOTOS DE VEHÍCULOS Y REPUESTOS
+=============================================
+
+Para que la página muestre las fotos reales de cada modelo de vehículo o de tus repuestos, simplemente guarda las imágenes en esta carpeta con los siguientes nombres estándar (en formato .jpg, .png o .webp):
+
+TOYOTA:
+- hilux.jpg (Aplica a: Hilux, 4Runner, Fortuner, Kavak, Tacoma)
+- corolla.jpg (Aplica a: Corolla, Baby Camry, Sensación)
+- yaris.jpg (Aplica a: Yaris, Belta)
+- terios.jpg (Aplica a: Terios, Bego)
+- prado.jpg (Aplica a: Prado, Meru)
+- camry.jpg
+- tundra.jpg (Aplica a: Tundra, Sequoia, Roraima)
+- hiace.jpg (Aplica a: Hiace, Coaster, Previa)
+- starlet.jpg
+
+CHEVROLET:
+- cruze.jpg
+- aveo.jpg
+- optra.jpg
+- corsa.jpg
+- spark.jpg
+- silverado.jpg (Aplica a: Silverado, Cheyenne, Rey Camión)
+- tahoe.jpg (Aplica a: Tahoe, Avalanche, Suburban)
+- blazer.jpg (Aplica a: Blazer, TrailBlazer)
+- orlando.jpg (Aplica a: Orlando, Captiva)
+- epica.jpg
+- dmax.jpg (Aplica a: Luv D-Max)
+
+JEEP / DODGE:
+- grand-cherokee.jpg (Aplica a: Grand Cherokee WJ, WK, WK2)
+- cherokee.jpg (Aplica a: Cherokee XJ, KJ, KK, Liberty)
+- compass.jpg
+- caliber.jpg
+- ram.jpg (Aplica a: RAM 1500, 2500, Dakota)
+- neon.jpg
+
+FORD:
+- explorer.jpg
+- fiesta.jpg (Aplica a: Fiesta Power, Max, Move, Balita)
+- triton.jpg (Aplica a: F-150, Tritón, Fortaleza, Super Duty)
+- focus.jpg
+- ecosport.jpg
+- ranger.jpg
+- cargo.jpg (Aplica a: Ford Cargo)
+
+HYUNDAI / KIA:
+- tucson.jpg (Aplica a: Tucson, Sportage)
+- elantra.jpg
+- santa-fe.jpg
+- accent.jpg (Aplica a: Accent, Getz)
+- h1.jpg (Aplica a: H1, H100, HD78)
+- rio.jpg
+- picanto.jpg
+
+MITSUBISHI:
+- lancer.jpg (Aplica a: Lancer, Touring, Signo)
+- montero.jpg (Aplica a: Montero, Dakar)
+- l300.jpg (Aplica a: L300 Panel)
+- l200.jpg (Aplica a: L200 Sportero)
+
+MAZDA:
+- mazda-3.jpg
+- mazda-6.jpg
+- bt50.jpg (Aplica a: BT-50, B2600, B2200)
+- allegro.jpg (Aplica a: Allegro, Ford Láser)
+
+VOLKSWAGEN:
+- gol.jpg (Aplica a: Gol, Parati, Saveiro)
+- fox.jpg (Aplica a: Fox, CrossFox, SpaceFox)
+- bora.jpg (Aplica a: Bora, Jetta, Golf)
+
+RENAULT:
+- clio.jpg (Aplica a: Clio, Symbol, Logan, Megane, Twingo)
+
+NISSAN:
+- sentra.jpg (Aplica a: Sentra B13, B14, B15, B16, Tiida)
+- frontier.jpg (Aplica a: Frontier, Patrol, Pathfinder)
+
+SUZUKI:
+- grand-vitara.jpg (Aplica a: Grand Vitara, XL5, XL7)
+- swift.jpg
+
+HONDA:
+- civic.jpg
+- accord.jpg
+- crv.jpg
+
+PEUGEOT:
+- peugeot-206.jpg (Aplica a: 206, 207, 307, Partner)
+
+FIAT:
+- palio.jpg (Aplica a: Palio, Siena, Uno Fire)
+
+DIÉSEL / PESADOS:
+- iveco-daily.jpg
+- iveco-tector.jpg
+- cat-3116.jpg (Caterpillar)
+- cummins-isb.jpg
+- isuzu-npr.jpg
+- sprinter.jpg (Mercedes-Benz)
+
+Nota: También puedes asignar fotos individuales directamente a cualquier repuesto desde la web en el botón "Admin" -> "Agregar / Editar Producto" -> campo "URL de Foto / Imagen".
