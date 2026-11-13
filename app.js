@@ -88,6 +88,8 @@
 
   const els = {
     sidebar: document.getElementById('sidebar'),
+    closeSidebarBtn: document.getElementById('closeSidebarBtn'),
+    sidebarBackdrop: document.getElementById('sidebarBackdrop'),
     menuToggleBtn: document.getElementById('menuToggleBtn'),
     searchInput: document.getElementById('searchInput'),
     clearSearchBtn: document.getElementById('clearSearchBtn'),
@@ -343,7 +345,10 @@
         state.currentPage = 1;
         renderCategories();
         renderCatalog();
-        if (window.innerWidth <= 860) els.sidebar.classList.remove('open');
+        if (window.innerWidth <= 860) {
+          els.sidebar.classList.remove('open');
+          if (els.sidebarBackdrop) els.sidebarBackdrop.classList.remove('open');
+        }
       });
       els.categoryList.appendChild(btn);
     });
@@ -1177,8 +1182,23 @@
 
   function bindEvents() {
     els.menuToggleBtn.addEventListener('click', () => {
-      els.sidebar.classList.toggle('open');
+      const isOpen = els.sidebar.classList.toggle('open');
+      if (els.sidebarBackdrop) els.sidebarBackdrop.classList.toggle('open', isOpen);
     });
+
+    if (els.closeSidebarBtn) {
+      els.closeSidebarBtn.addEventListener('click', () => {
+        els.sidebar.classList.remove('open');
+        if (els.sidebarBackdrop) els.sidebarBackdrop.classList.remove('open');
+      });
+    }
+
+    if (els.sidebarBackdrop) {
+      els.sidebarBackdrop.addEventListener('click', () => {
+        els.sidebar.classList.remove('open');
+        els.sidebarBackdrop.classList.remove('open');
+      });
+    }
 
     els.searchInput.addEventListener('input', (e) => {
       state.search = e.target.value;
