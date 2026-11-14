@@ -1,4 +1,4 @@
-const CACHE_NAME = 'repuestos-mj-cache-v4';
+const CACHE_NAME = 'repuestos-mj-cache-v5';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -11,7 +11,8 @@ const STATIC_ASSETS = [
   './assets/icon-192.png',
   './assets/icon-512.png',
   './assets/bcv-logo.jpg',
-  './assets/pagomovil-banner.jpg'
+  './assets/pagomovil-banner.jpg',
+  './assets/banner-hero-electrico.jpg'
 ];
 
 self.addEventListener('install', (e) => {

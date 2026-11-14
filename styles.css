@@ -3965,6 +3965,185 @@ html, body {
   line-height: 1.4;
 }
 
+/* ==========================================================================
+   BANNER HERO PROMOCIONAL (REPUESTOS ELÉCTRICOS MULTIMARCA)
+   ========================================================================== */
+.hero-banner-section {
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.hero-banner-card {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #090e18;
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.22), 0 0 25px rgba(2, 132, 199, 0.12);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.25s ease;
+  user-select: none;
+  outline: none;
+}
+
+.hero-banner-card:hover,
+.hero-banner-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.65);
+  box-shadow: 0 12px 38px rgba(0, 0, 0, 0.28), 0 0 32px rgba(56, 189, 248, 0.25);
+}
+
+.hero-banner-card:active {
+  transform: translateY(0) scale(0.995);
+}
+
+.hero-banner-media {
+  position: relative;
+  width: 100%;
+  background: #060911;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-banner-img {
+  width: 100%;
+  height: auto;
+  max-height: 380px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.hero-banner-card:hover .hero-banner-img {
+  transform: scale(1.012);
+}
+
+/* Barra inferior interactiva del banner */
+.hero-banner-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 18px;
+  background: linear-gradient(90deg, #090e18 0%, #0d1527 50%, #090e18 100%);
+  border-top: 1px solid rgba(56, 189, 248, 0.18);
+  flex-wrap: wrap;
+}
+
+.hero-banner-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: #e2e8f0;
+}
+
+.hero-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  display: inline-block;
+  animation: heroPulse 1.8s infinite;
+}
+
+@keyframes heroPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.hero-banner-pill-text strong {
+  color: #38bdf8;
+}
+
+.hero-banner-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
+  transition: all 0.2s ease;
+}
+
+.hero-banner-card:hover .hero-banner-cta {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.45);
+  transform: translateX(2px);
+}
+
+.hero-banner-cta svg {
+  transition: transform 0.2s ease;
+}
+
+.hero-banner-card:hover .hero-banner-cta svg {
+  transform: translateY(2px);
+}
+
+/* Efecto de foco y pulso al saltar al buscador de vehículo */
+@keyframes garageHighlightPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.8);
+    border-color: #38bdf8;
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(2, 132, 199, 0);
+    border-color: #0284c7;
+    transform: scale(1.01);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(2, 132, 199, 0);
+    transform: scale(1);
+  }
+}
+
+.garage-highlight-pulse {
+  animation: garageHighlightPulse 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2;
+}
+
+/* Adaptación para pantallas de móvil (hasta 768px) */
+@media (max-width: 768px) {
+  .hero-banner-card {
+    border-radius: 12px;
+  }
+  .hero-banner-img {
+    aspect-ratio: 1024 / 571;
+    max-height: none;
+    height: auto;
+  }
+  .hero-banner-bar {
+    padding: 8px 12px;
+    gap: 8px;
+    justify-content: center;
+  }
+  .hero-banner-pill {
+    font-size: 0.74rem;
+    text-align: center;
+    justify-content: center;
+  }
+  .hero-banner-cta {
+    width: 100%;
+    justify-content: center;
+    padding: 7px 12px;
+    font-size: 0.78rem;
+  }
+}
+
 /* Reglas de impresión limpias para PDF / Impresora */
 @media print {
   body * {

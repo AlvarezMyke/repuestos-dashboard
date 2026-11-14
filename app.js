@@ -9,7 +9,8 @@
     adminSession: 'autopartes_admin_session',
     bcvRate: 'autopartes_bcv_rate_v1',
     pagoMovil: 'autopartes_pago_movil_v1',
-    quoteConfig: 'autopartes_quote_config_v1'
+    quoteConfig: 'autopartes_quote_config_v1',
+    heroBanner: 'autopartes_hero_banner_v1'
   };
 
   const DEFAULT_BCV_RATE = 911.62;
@@ -139,7 +140,8 @@
     bcvRate: bcvConfig.rate,
     bcvDate: bcvConfig.date,
     pagoMovil: loadPagoMovilConfig(),
-    quoteConfig: loadQuoteConfig()
+    quoteConfig: loadQuoteConfig(),
+    showHeroBanner: localStorage.getItem('autopartes_hero_banner_v1') !== 'false'
   };
 
   const els = {
@@ -237,6 +239,9 @@
     changePasswordForm: document.getElementById('changePasswordForm'),
     newAdminPass: document.getElementById('newAdminPass'),
     confirmAdminPass: document.getElementById('confirmAdminPass'),
+    heroBannerSection: document.getElementById('heroBannerSection'),
+    heroBannerCard: document.getElementById('heroBannerCard'),
+    toggleHeroBannerCheckbox: document.getElementById('toggleHeroBannerCheckbox'),
     // Lightbox DOM
     imageLightboxOverlay: document.getElementById('imageLightboxOverlay'),
     lightboxContainer: document.getElementById('lightboxContainer'),
@@ -1682,6 +1687,9 @@ function refreshFilterControls() {
     }
     switchAdminTab(defaultTab);
     updateQuoteAdminUI();
+    if (els.toggleHeroBannerCheckbox) {
+      els.toggleHeroBannerCheckbox.checked = state.showHeroBanner;
+    }
     els.adminPanelOverlay.classList.add('open');
   }
 
@@ -2403,7 +2411,43 @@ function refreshFilterControls() {
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      if (els.pwaInstallBtn) {
+      
+    // Banner Hero Promocional: Clic para navegar y enfocar el Buscador de Vehículo
+    if (els.heroBannerCard) {
+      els.heroBannerCard.addEventListener('click', () => {
+        const garageEl = document.getElementById('garageSelectorBar');
+        if (garageEl) {
+          garageEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          garageEl.classList.remove('garage-highlight-pulse');
+          void garageEl.offsetWidth; // Reflow para reiniciar la animación
+          garageEl.classList.add('garage-highlight-pulse');
+          setTimeout(() => {
+            if (els.vehicleBrandSelect) {
+              try { els.vehicleBrandSelect.focus(); } catch {}
+            }
+          }, 350);
+        }
+      });
+    }
+
+    // Admin: Activar o desactivar visibilidad del Banner Promocional
+    if (els.toggleHeroBannerCheckbox) {
+      els.toggleHeroBannerCheckbox.addEventListener('change', (e) => {
+        state.showHeroBanner = e.target.checked;
+        localStorage.setItem(STORAGE_KEYS.heroBanner, String(state.showHeroBanner));
+        if (els.heroBannerSection) {
+          els.heroBannerSection.style.display = state.showHeroBanner ? '' : 'none';
+        }
+        showToast(state.showHeroBanner ? 'Banner promocional activado' : 'Banner promocional ocultado');
+      });
+    }
+
+    // Inicializar estado del banner
+    if (els.heroBannerSection) {
+      els.heroBannerSection.style.display = state.showHeroBanner ? '' : 'none';
+    }
+
+    if (els.pwaInstallBtn) {
         els.pwaInstallBtn.classList.add('available');
       }
     });

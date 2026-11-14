@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261114-12" />
+  <link rel="stylesheet" href="styles.css?v=20261114-14" />
 </head>
 <body>
   <!-- Barra superior -->
@@ -170,6 +170,30 @@
 
     <!-- Contenido principal del dashboard -->
     <main class="main">
+      <!-- Banner Promocional Principal (Hero) -->
+      <section class="hero-banner-section" id="heroBannerSection" aria-label="Banner de Repuestos Eléctricos Multimarca">
+        <div class="hero-banner-card" id="heroBannerCard" role="button" tabindex="0" title="Ver repuestos disponibles para tu vehículo">
+          <div class="hero-banner-media">
+            <img 
+              src="assets/banner-hero-electrico.jpg" 
+              alt="Repuestos Eléctricos para Vehículos Multimarcas - Alternadores, Arranques, Sensores y Bobinas" 
+              class="hero-banner-img"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </div>
+          <div class="hero-banner-bar">
+            <div class="hero-banner-pill">
+              <span class="hero-pulse-dot"></span>
+              <span class="hero-banner-pill-text"><strong>Especialistas en Electricidad Automotriz</strong> · Alternadores, Arranques, Sensores y Bobinas</span>
+            </div>
+            <div class="hero-banner-cta">
+              <span>¿Qué carro tienes? Buscar repuesto</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+        </div>
+      </section>
       <!-- Indicadores KPI -->
       <section class="kpi-grid" aria-label="Resumen del catálogo">
         <article class="kpi-card">
@@ -567,6 +591,17 @@
 
           <hr class="divider" />
 
+          <div class="settings-section">
+            <h3 style="font-size: 0.95rem;">Banner Promocional Principal</h3>
+            <p class="admin-hint">
+              Controla si el banner de Repuestos Eléctricos Multimarca se muestra visible en la página principal para tus clientes.
+            </p>
+            <label class="checkbox-row" style="margin-top: 10px; cursor: pointer; font-size: 0.9rem;">
+              <input id="toggleHeroBannerCheckbox" type="checkbox" checked />
+              <span>Mostrar Banner Promocional de Portada</span>
+            </label>
+          </div>
+
           <form id="changePasswordForm" class="admin-grid-form">
             <h3 class="form-span-2" style="font-size: 0.95rem;">Cambiar contraseña de Administrador</h3>
             <label class="form-field">
@@ -872,9 +907,9 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <script src="data.js?v=20261114-12"></script>
-  <script src="vehicle-graphics.js?v=20261114-12"></script>
-  <script src="xlsx-importer.js?v=20261114-12"></script>
-  <script src="app.js?v=20261114-12"></script>
+  <script src="data.js?v=20261114-14"></script>
+  <script src="vehicle-graphics.js?v=20261114-14"></script>
+  <script src="xlsx-importer.js?v=20261114-14"></script>
+  <script src="app.js?v=20261114-14"></script>
 </body>
 </html>
