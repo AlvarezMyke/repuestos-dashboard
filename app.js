@@ -114,6 +114,8 @@
     cart: validInitialCart,
     theme: localStorage.getItem(STORAGE_KEYS.theme) || 'light',
     isAdmin: sessionStorage.getItem(STORAGE_KEYS.adminSession) === 'true',
+    vehicleBrand: 'all',
+    vehicleModel: 'all',
     bcvRate: bcvConfig.rate,
     bcvDate: bcvConfig.date,
     pagoMovil: loadPagoMovilConfig()
@@ -256,7 +258,22 @@
     adminPmPhoneInput: document.getElementById('adminPmPhoneInput'),
     adminPmHolderInput: document.getElementById('adminPmHolderInput'),
     // PWA Instalación
-    pwaInstallBtn: document.getElementById('pwaInstallBtn')
+    pwaInstallBtn: document.getElementById('pwaInstallBtn'),
+    // Buscador por Vehículo
+    garageSelectorBar: document.getElementById('garageSelectorBar'),
+    vehicleBrandSelect: document.getElementById('vehicleBrandSelect'),
+    vehicleModelSelect: document.getElementById('vehicleModelSelect'),
+    clearVehicleFilterBtn: document.getElementById('clearVehicleFilterBtn'),
+    vehicleActiveNotice: document.getElementById('vehicleActiveNotice'),
+    vehicleNoticeText: document.getElementById('vehicleNoticeText'),
+    resetVehicleNoticeBtn: document.getElementById('resetVehicleNoticeBtn'),
+    // Cotización Formal en PDF
+    downloadPdfQuoteBtn: document.getElementById('downloadPdfQuoteBtn'),
+    quotePdfModalOverlay: document.getElementById('quotePdfModalOverlay'),
+    closeQuotePdfBtn: document.getElementById('closeQuotePdfBtn'),
+    printQuoteBtn: document.getElementById('printQuoteBtn'),
+    quotePdfWhatsappBtn: document.getElementById('quotePdfWhatsappBtn'),
+    quotePrintDocument: document.getElementById('quotePrintDocument')
   };
 
   let isLightboxZoomed = false;
@@ -334,7 +351,298 @@
     };
   }
 
-  function refreshFilterControls() {
+  
+  const POPULAR_MAKES = [
+    { key: 'toyota', label: 'Toyota' },
+    { key: 'chevrolet', label: 'Chevrolet / GM' },
+    { key: 'ford', label: 'Ford' },
+    { key: 'jeep', label: 'Jeep / Mopar' },
+    { key: 'mitsubishi', label: 'Mitsubishi' },
+    { key: 'mazda', label: 'Mazda' },
+    { key: 'nissan', label: 'Nissan' },
+    { key: 'hyundai', label: 'Hyundai' },
+    { key: 'honda', label: 'Honda' },
+    { key: 'volkswagen', label: 'Volkswagen' },
+    { key: 'renault', label: 'Renault' },
+    { key: 'suzuki', label: 'Suzuki' },
+    { key: 'isuzu', label: 'Isuzu' },
+    { key: 'fiat', label: 'Fiat' },
+    { key: 'peugeot', label: 'Peugeot' },
+    { key: 'chery', label: 'Chery' },
+    { key: 'caterpillar', label: 'Caterpillar / Diesel' }
+  ];
+
+  function populateGarageBrands() {
+    if (!els.vehicleBrandSelect) return;
+    const vg = window.VehicleGraphics;
+
+    const makeCounts = {};
+    POPULAR_MAKES.forEach(m => makeCounts[m.key] = 0);
+
+    catalogData.items.forEach(p => {
+      const veh = vg ? vg.resolveVehicle(p) : { brand: p.brand };
+      const bStr = (p.brand + ' ' + (p.brandRaw || '') + ' ' + (veh.brand || '')).toLowerCase();
+      POPULAR_MAKES.forEach(m => {
+        const keys = m.key === 'chevrolet' ? ['chev', 'gm'] :
+                     m.key === 'jeep' ? ['jeep', 'mopar', 'dodge', 'chrysler'] :
+                     m.key === 'ford' ? ['ford', 'motorcraft'] :
+                     m.key === 'volkswagen' ? ['volkswagen', 'vw'] :
+                     m.key === 'caterpillar' ? ['cat', 'caterpillar', 'cummins', 'iveco'] : [m.key];
+        if (keys.some(k => bStr.includes(k))) {
+          makeCounts[m.key]++;
+        }
+      });
+    });
+
+    els.vehicleBrandSelect.innerHTML = '<option value="all">🚗 Todas las Marcas (Selecciona tu carro)</option>';
+    POPULAR_MAKES.forEach(m => {
+      const count = makeCounts[m.key] || 0;
+      if (count > 0) {
+        const opt = document.createElement('option');
+        opt.value = m.key;
+        opt.textContent = m.label + ' (' + count + ' repuestos)';
+        els.vehicleBrandSelect.appendChild(opt);
+      }
+    });
+
+    els.vehicleBrandSelect.value = state.vehicleBrand;
+  }
+
+  function updateGarageModels(brandKey) {
+    if (!els.vehicleModelSelect) return;
+    if (brandKey === 'all') {
+      els.vehicleModelSelect.disabled = true;
+      els.vehicleModelSelect.innerHTML = '<option value="all">🚘 Selecciona primero una marca arriba</option>';
+      state.vehicleModel = 'all';
+      updateGarageNotice();
+      return;
+    }
+
+    const vg = window.VehicleGraphics;
+    const keys = brandKey === 'chevrolet' ? ['chev', 'gm'] :
+                 brandKey === 'jeep' ? ['jeep', 'mopar', 'dodge', 'chrysler'] :
+                 brandKey === 'ford' ? ['ford', 'motorcraft'] :
+                 brandKey === 'volkswagen' ? ['volkswagen', 'vw'] :
+                 brandKey === 'caterpillar' ? ['cat', 'caterpillar', 'cummins', 'iveco'] : [brandKey];
+
+    const matchingParts = catalogData.items.filter(p => {
+      const veh = vg ? vg.resolveVehicle(p) : { brand: p.brand };
+      const bStr = (p.brand + ' ' + (p.brandRaw || '') + ' ' + (veh.brand || '')).toLowerCase();
+      return keys.some(k => bStr.includes(k));
+    });
+
+    const modelCounts = new Map();
+    matchingParts.forEach(p => {
+      const veh = vg ? vg.resolveVehicle(p) : { modelName: 'General' };
+      const mName = veh.modelName;
+      if (mName && mName !== 'General' && mName !== 'Multimodelo') {
+        modelCounts.set(mName, (modelCounts.get(mName) || 0) + 1);
+      }
+    });
+
+    els.vehicleModelSelect.disabled = false;
+    els.vehicleModelSelect.innerHTML = '<option value="all">🚘 Todos los modelos de esta marca (' + matchingParts.length + ' repuestos)</option>';
+
+    [...modelCounts.entries()]
+      .sort((a, b) => a[0].localeCompare(b[0], 'es'))
+      .forEach(([model, count]) => {
+        const opt = document.createElement('option');
+        opt.value = model;
+        opt.textContent = model + ' (' + count + ')';
+        els.vehicleModelSelect.appendChild(opt);
+      });
+
+    if (modelCounts.has(state.vehicleModel)) {
+      els.vehicleModelSelect.value = state.vehicleModel;
+    } else {
+      state.vehicleModel = 'all';
+      els.vehicleModelSelect.value = 'all';
+    }
+
+    updateGarageNotice();
+  }
+
+  function updateGarageNotice() {
+    const isFiltered = state.vehicleBrand !== 'all' || state.vehicleModel !== 'all';
+    if (els.clearVehicleFilterBtn) {
+      els.clearVehicleFilterBtn.style.display = isFiltered ? 'inline-flex' : 'none';
+    }
+    if (els.vehicleActiveNotice) {
+      if (isFiltered) {
+        const brandObj = POPULAR_MAKES.find(m => m.key === state.vehicleBrand);
+        const brandLabel = brandObj ? brandObj.label : state.vehicleBrand;
+        const modelLabel = state.vehicleModel !== 'all' ? (' · Modelo: ' + state.vehicleModel) : ' (Todos los modelos)';
+        els.vehicleNoticeText.textContent = 'Filtro activo: ' + brandLabel + modelLabel;
+        els.vehicleActiveNotice.style.display = 'flex';
+      } else {
+        els.vehicleActiveNotice.style.display = 'none';
+      }
+    }
+  }
+
+  function resetVehicleFilter() {
+    state.vehicleBrand = 'all';
+    state.vehicleModel = 'all';
+    if (els.vehicleBrandSelect) els.vehicleBrandSelect.value = 'all';
+    if (els.vehicleModelSelect) {
+      els.vehicleModelSelect.disabled = true;
+      els.vehicleModelSelect.innerHTML = '<option value="all">🚘 Selecciona primero una marca arriba</option>';
+    }
+    updateGarageNotice();
+    state.currentPage = 1;
+    renderCatalog();
+  }
+
+  // --- COTIZACIÓN FORMAL EN PDF ---
+  function openQuotePdfModal() {
+    if (state.cart.length === 0) {
+      showToast('Agrega repuestos disponibles a la cotización primero');
+      return;
+    }
+    renderQuoteDocument();
+    if (els.quotePdfModalOverlay) {
+      els.quotePdfModalOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeQuotePdfModal() {
+    if (els.quotePdfModalOverlay) {
+      els.quotePdfModalOverlay.classList.remove('open');
+      if (!els.detailOverlay.classList.contains('open') && !els.cartOverlay.classList.contains('open')) {
+        document.body.style.overflow = '';
+      }
+    }
+  }
+
+  function renderQuoteDocument() {
+    if (!els.quotePrintDocument) return;
+
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const dateFormatted = pad(now.getDate()) + '/' + pad(now.getMonth() + 1) + '/' + now.getFullYear();
+    const timeFormatted = now.toLocaleTimeString('es-VE', { hour: '2-digit', minute: '2-digit' });
+    const quoteNumber = 'COT-' + now.getFullYear() + pad(now.getMonth() + 1) + pad(now.getDate()) + '-' + Math.floor(1000 + Math.random() * 9000);
+
+    let subtotalUsd = 0;
+    let totalUsd = 0;
+
+    const rowsHtml = state.cart.map((entry, idx) => {
+      const part = catalogData.items.find(p => p.id === entry.id);
+      if (!part) return '';
+      const veh = window.VehicleGraphics ? window.VehicleGraphics.resolveVehicle(part) : { brand: part.brand, modelName: '' };
+      const lineUsd = part.priceUsd * entry.qty;
+      const lineTot = part.priceTotal * entry.qty;
+      const lineBs = lineTot * state.bcvRate;
+
+      subtotalUsd += lineUsd;
+      totalUsd += lineTot;
+
+      return '<tr>' +
+        '<td class="text-center">' + (idx + 1) + '</td>' +
+        '<td><strong class="quote-part-sku">' + escapeHtml(part.partNumber) + '</strong></td>' +
+        '<td><strong>' + escapeHtml(part.name) + '</strong><div style="font-size: 0.72rem; color: #64748b;">' + escapeHtml(part.categoryName) + '</div></td>' +
+        '<td>' + escapeHtml(veh.brand) + (veh.modelName && veh.modelName !== 'General' ? ' · ' + escapeHtml(veh.modelName) : '') + '</td>' +
+        '<td class="text-center"><strong>' + entry.qty + '</strong></td>' +
+        '<td class="text-right">' + formatMoney(part.priceTotal) + '</td>' +
+        '<td class="text-right"><strong>' + formatMoney(lineTot) + '</strong></td>' +
+        '<td class="text-right" style="color: #0284c7; font-family: var(--font-mono); font-weight: 700;">' + formatBs(lineBs) + '</td>' +
+      '</tr>';
+    }).join('');
+
+    const taxUsd = totalUsd - subtotalUsd;
+    const totalBs = totalUsd * state.bcvRate;
+
+    els.quotePrintDocument.innerHTML = `
+      <div class="quote-doc-header">
+        <div class="quote-brand-box">
+          <h1>REPUESTOS ELÉCTRICOS MJ S.A.</h1>
+          <p><strong>Venta de Repuestos Automotrices Eléctricos Multimarca</strong></p>
+          <p>RIF: V-16658322 · Caracas, Venezuela</p>
+          <p>WhatsApp / Ventas Directas: +58 416-7456111</p>
+        </div>
+        <div class="quote-meta-box">
+          <span class="quote-doc-badge">PRESUPUESTO FORMAL</span>
+          <div class="quote-meta-row"><strong>N° Control:</strong> ${quoteNumber}</div>
+          <div class="quote-meta-row"><strong>Fecha:</strong> ${dateFormatted} · ${timeFormatted}</div>
+          <div class="quote-meta-row"><strong>Validez:</strong> 24 Horas</div>
+          <div class="quote-meta-row" style="color: #0284c7; font-weight: 700;"><strong>Tasa Oficial BCV:</strong> ${formatBs(state.bcvRate)} Bs/$</div>
+        </div>
+      </div>
+
+      <div class="quote-client-section">
+        <div>
+          <strong>Atención a:</strong> Cliente Particular / Taller Mecánico
+        </div>
+        <div>
+          <strong>Despacho:</strong> Envíos Nacionales MRW · ZOOM · TEALCA (Salida 2:10 PM) / Entregas en Caracas
+        </div>
+      </div>
+
+      <table class="quote-table">
+        <thead>
+          <tr>
+            <th style="width: 32px;" class="text-center">#</th>
+            <th style="width: 120px;">N° de Parte</th>
+            <th>Descripción del Repuesto</th>
+            <th style="width: 130px;">Vehículo</th>
+            <th style="width: 45px;" class="text-center">Cant.</th>
+            <th style="width: 85px;" class="text-right">Precio Unit.</th>
+            <th style="width: 85px;" class="text-right">Total ($)</th>
+            <th style="width: 115px;" class="text-right">Total (Bs.)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml}
+        </tbody>
+      </table>
+
+      <div class="quote-totals-grid">
+        <div class="quote-totals-box">
+          <div class="quote-total-line">
+            <span>Subtotal Costo de Venta:</span>
+            <strong>${formatMoney(subtotalUsd)}</strong>
+          </div>
+          <div class="quote-total-line">
+            <span>Diferencia / IVA Estimado (16%):</span>
+            <strong>${formatMoney(taxUsd)}</strong>
+          </div>
+          <div class="quote-total-line bcv-total">
+            <span>TOTAL EN BOLÍVARES (Bs.):</span>
+            <span style="font-family: var(--font-mono); font-size: 1.05rem;">Bs. ${formatBs(totalBs)}</span>
+          </div>
+          <div class="quote-total-line grand-total">
+            <span>TOTAL A PAGAR ($ USD):</span>
+            <span style="font-family: var(--font-mono); font-size: 1.15rem;">${formatMoney(totalUsd)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quote-bank-instructions">
+        <p style="margin: 0 0 6px 0;"><strong>💳 DATOS OFICIALES PARA PAGO MÓVIL:</strong></p>
+        <p style="margin: 2px 0;"><strong>Banco:</strong> ${state.pagoMovil.bank} · <strong>Teléfono:</strong> ${state.pagoMovil.phone} · <strong>Cédula/RIF:</strong> ${state.pagoMovil.idNumber} · <strong>Titular:</strong> ${state.pagoMovil.holder}</p>
+        <p style="margin: 4px 0 0 0; font-size: 0.73rem; color: #475569;">Para confirmar su pedido, envíe el comprobante de pago vía WhatsApp al <strong>+584167456111</strong> haciendo referencia al N° <strong>${quoteNumber}</strong>.</p>
+      </div>
+
+      <div class="quote-doc-footer">
+        <p>Documento proforma emitido por Repuestos Eléctricos MJ S.A. a tasa oficial del Banco Central de Venezuela (BCV).</p>
+        <p>Garantía de funcionamiento en todos nuestros repuestos. Precios sujetos a vigencia de 24 horas.</p>
+      </div>
+    `;
+
+    if (els.quotePdfWhatsappBtn) {
+      const quoteSummaryText = `Hola, envío el Presupuesto Formal ${quoteNumber} generado en su página web:\n` +
+        `Total: ${formatMoney(totalUsd)} (Bs. ${formatBs(totalBs)})\n` +
+        `Por favor confirmar disponibilidad y método de despacho.`;
+      els.quotePdfWhatsappBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(quoteSummaryText)}`;
+    }
+  }
+
+  function printQuoteDocument() {
+    window.print();
+  }
+
+function refreshFilterControls() {
     const prevBrand = state.brand;
     els.brandFilter.innerHTML = '<option value="all">Todas las marcas</option>';
 
@@ -365,6 +673,7 @@
       state.maxPrice = maxPrice;
     }
     els.maxPriceRange.value = String(state.maxPrice);
+    populateGarageBrands();
     els.maxPriceLabel.textContent = `$${state.maxPrice}`;
 
     // Select de categorías en formulario de edición Admin
@@ -434,6 +743,30 @@
       if (state.stock === 'available' && !part.inStock) return false;
       if (state.stock === 'out' && part.inStock) return false;
       if (state.brand !== 'all' && part.brand !== state.brand) return false;
+
+      const veh = window.VehicleGraphics ? window.VehicleGraphics.resolveVehicle(part) : { brand: part.brand, modelName: '' };
+
+      if (state.vehicleBrand !== 'all') {
+        const bKey = state.vehicleBrand.toLowerCase();
+        const pBrand = (part.brand || '').toLowerCase();
+        const pBrandRaw = (part.brandRaw || '').toLowerCase();
+        const vBrand = (veh.brand || '').toLowerCase();
+        const keys = bKey === 'chevrolet' ? ['chev', 'gm'] :
+                     bKey === 'jeep' ? ['jeep', 'mopar', 'dodge', 'chrysler'] :
+                     bKey === 'ford' ? ['ford', 'motorcraft'] :
+                     bKey === 'volkswagen' ? ['volkswagen', 'vw'] :
+                     bKey === 'caterpillar' ? ['cat', 'caterpillar', 'cummins', 'iveco'] : [bKey];
+        const brandMatches = keys.some(k => pBrand.includes(k) || pBrandRaw.includes(k) || vBrand.includes(k));
+        if (!brandMatches) return false;
+      }
+
+      if (state.vehicleModel !== 'all') {
+        const mKey = state.vehicleModel.toLowerCase();
+        const vModel = (veh.modelName || '').toLowerCase();
+        const partFullName = (part.name + ' ' + part.partNumber).toLowerCase();
+        const modelMatches = vModel.includes(mKey) || partFullName.includes(mKey);
+        if (!modelMatches) return false;
+      }
       if (state.onlyPriced && part.priceUsd <= 0) return false;
       if (part.priceUsd > state.maxPrice) return false;
 
@@ -1446,6 +1779,53 @@
     });
 
     els.resetAllBtn.addEventListener('click', resetAllFilters);
+
+    // Eventos Buscador por Vehículo
+    if (els.vehicleBrandSelect) {
+      els.vehicleBrandSelect.addEventListener('change', (e) => {
+        state.vehicleBrand = e.target.value;
+        state.vehicleModel = 'all';
+        updateGarageModels(state.vehicleBrand);
+        state.currentPage = 1;
+        renderCatalog();
+      });
+    }
+
+    if (els.vehicleModelSelect) {
+      els.vehicleModelSelect.addEventListener('change', (e) => {
+        state.vehicleModel = e.target.value;
+        updateGarageNotice();
+        state.currentPage = 1;
+        renderCatalog();
+      });
+    }
+
+    if (els.clearVehicleFilterBtn) {
+      els.clearVehicleFilterBtn.addEventListener('click', resetVehicleFilter);
+    }
+
+    if (els.resetVehicleNoticeBtn) {
+      els.resetVehicleNoticeBtn.addEventListener('click', resetVehicleFilter);
+    }
+
+    // Eventos Cotización Formal en PDF
+    if (els.downloadPdfQuoteBtn) {
+      els.downloadPdfQuoteBtn.addEventListener('click', openQuotePdfModal);
+    }
+
+    if (els.closeQuotePdfBtn) {
+      els.closeQuotePdfBtn.addEventListener('click', closeQuotePdfModal);
+    }
+
+    if (els.printQuoteBtn) {
+      els.printQuoteBtn.addEventListener('click', printQuoteDocument);
+    }
+
+    if (els.quotePdfModalOverlay) {
+      els.quotePdfModalOverlay.addEventListener('click', (e) => {
+        if (e.target === els.quotePdfModalOverlay) closeQuotePdfModal();
+      });
+    }
 
     els.pageSizeSelect.addEventListener('change', (e) => {
       state.pageSize = e.target.value;

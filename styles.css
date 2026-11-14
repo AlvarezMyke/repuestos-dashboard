@@ -3486,3 +3486,533 @@ html, body {
   text-align: center;
   line-height: 1.25;
 }
+
+
+/* ==========================================================================
+   BUSCADOR AUTOMOTRIZ POR VEHÍCULO (GARAGE SELECTOR)
+   ========================================================================== */
+.garage-selector-bar {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.06), rgba(234, 88, 12, 0.05));
+  border: 1px solid rgba(30, 58, 138, 0.18);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .garage-selector-bar {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.22), rgba(234, 88, 12, 0.12));
+  border-color: rgba(96, 165, 250, 0.25);
+}
+
+.garage-selector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.garage-header-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.garage-badge-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.garage-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.garage-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 2px 0 0;
+}
+
+.btn-clear-garage {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-clear-garage:hover {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.garage-grid-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.garage-field label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.step-num {
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  color: #ffffff;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+.garage-select-wrapper {
+  position: relative;
+}
+
+.garage-select {
+  width: 100%;
+  height: 42px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  padding: 0 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.garage-select:disabled {
+  background: var(--bg-hover);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.garage-select:focus:not(:disabled) {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.vehicle-active-notice {
+  margin-top: 12px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.vehicle-notice-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #15803d;
+}
+
+[data-theme="dark"] .vehicle-notice-left {
+  color: #4ade80;
+}
+
+.btn-notice-reset {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.btn-notice-reset:hover {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+@media (max-width: 640px) {
+  .garage-grid-controls {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+/* ==========================================================================
+   BOTÓN Y MODAL DE PRESUPUESTO / COTIZACIÓN FORMAL EN PDF
+   ========================================================================== */
+.btn-pdf-quote {
+  width: 100%;
+  background: linear-gradient(135deg, #1e3a8a, #0284c7);
+  color: #ffffff !important;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.16s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+  margin-top: 6px;
+}
+
+.btn-pdf-quote:hover {
+  background: linear-gradient(135deg, #1d4ed8, #0369a1);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35);
+}
+
+/* Modal Cotización PDF */
+.modal-quote-pdf {
+  max-width: 840px !important;
+  width: 95% !important;
+  max-height: 92vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  background: var(--bg-app);
+}
+
+.quote-modal-header {
+  flex-shrink: 0;
+  padding: 14px 18px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quote-header-icon {
+  font-size: 1.4rem;
+  margin-right: 8px;
+}
+
+.quote-modal-toolbar {
+  flex-shrink: 0;
+  background: var(--bg-surface);
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.quote-toolbar-hints {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
+
+.quote-toolbar-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-print-action {
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-print-action:hover {
+  background: #0369a1;
+}
+
+.btn-whatsapp-action {
+  background: #25D366;
+  color: #ffffff !important;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.btn-whatsapp-action:hover {
+  background: #1eb956;
+}
+
+.quote-modal-scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 18px;
+}
+
+/* Hoja del Presupuesto (Diseño Documento A4 / Corporativo) */
+.quote-document {
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: var(--radius-md);
+  padding: 32px 36px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-family: var(--font-sans);
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.quote-doc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #0f172a;
+  gap: 20px;
+}
+
+.quote-brand-box h1 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.01em;
+}
+
+.quote-brand-box p {
+  font-size: 0.78rem;
+  color: #475569;
+  margin: 2px 0;
+  line-height: 1.4;
+}
+
+.quote-meta-box {
+  text-align: right;
+  min-width: 220px;
+}
+
+.quote-doc-badge {
+  display: inline-block;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.quote-meta-row {
+  font-size: 0.78rem;
+  color: #475569;
+  margin: 3px 0;
+}
+
+.quote-meta-row strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.quote-client-section {
+  display: flex;
+  justify-content: space-between;
+  margin: 18px 0;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  font-size: 0.8rem;
+}
+
+.quote-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 0.78rem;
+}
+
+.quote-table th {
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 700;
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.quote-table td {
+  padding: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #1e293b;
+  vertical-align: middle;
+}
+
+.quote-table tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+.quote-table .text-center { text-align: center; }
+.quote-table .text-right { text-align: right; }
+
+.quote-part-sku {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #ea580c;
+  display: block;
+}
+
+.quote-totals-grid {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.quote-totals-box {
+  width: 320px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.quote-total-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.quote-total-line.grand-total {
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  border-bottom: none;
+}
+
+.quote-total-line.bcv-total {
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 800;
+  font-size: 0.92rem;
+  border-bottom: 1px solid #bfdbfe;
+}
+
+.quote-bank-instructions {
+  margin-top: 20px;
+  padding: 14px;
+  background: #f1f5f9;
+  border-radius: 6px;
+  border-left: 4px solid #0284c7;
+  font-size: 0.76rem;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.quote-bank-instructions strong {
+  color: #0f172a;
+}
+
+.quote-doc-footer {
+  margin-top: 24px;
+  padding-top: 14px;
+  border-top: 1px dashed #cbd5e1;
+  text-align: center;
+  font-size: 0.72rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+/* Reglas de impresión limpias para PDF / Impresora */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .quote-pdf-overlay,
+  .modal-quote-pdf,
+  .quote-modal-scroll,
+  #quotePrintDocument,
+  #quotePrintDocument * {
+    visibility: visible !important;
+  }
+  .quote-pdf-overlay {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+  .modal-quote-pdf {
+    width: 100% !important;
+    max-width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .no-print, .quote-modal-header, .quote-modal-toolbar, .modal-close {
+    display: none !important;
+  }
+  .quote-modal-scroll {
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+  .quote-document {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 10mm !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
