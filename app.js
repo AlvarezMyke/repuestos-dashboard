@@ -480,6 +480,23 @@
     }
   }
 
+  
+  // Global handlers for vehicle selector (cross-browser desktop & mobile support)
+  window.handleGarageBrandChange = function (val) {
+    state.vehicleBrand = val || 'all';
+    state.vehicleModel = 'all';
+    updateGarageModels(state.vehicleBrand);
+    state.currentPage = 1;
+    renderCatalog();
+  };
+
+  window.handleGarageModelChange = function (val) {
+    state.vehicleModel = val || 'all';
+    updateGarageNotice();
+    state.currentPage = 1;
+    renderCatalog();
+  };
+
   function resetVehicleFilter() {
     state.vehicleBrand = 'all';
     state.vehicleModel = 'all';
@@ -1782,22 +1799,19 @@ function refreshFilterControls() {
 
     // Eventos Buscador por Vehículo
     if (els.vehicleBrandSelect) {
-      els.vehicleBrandSelect.addEventListener('change', (e) => {
-        state.vehicleBrand = e.target.value;
-        state.vehicleModel = 'all';
-        updateGarageModels(state.vehicleBrand);
-        state.currentPage = 1;
-        renderCatalog();
-      });
+      const onBrandChange = (e) => {
+        window.handleGarageBrandChange(e.target.value);
+      };
+      els.vehicleBrandSelect.addEventListener('change', onBrandChange);
+      els.vehicleBrandSelect.addEventListener('input', onBrandChange);
     }
 
     if (els.vehicleModelSelect) {
-      els.vehicleModelSelect.addEventListener('change', (e) => {
-        state.vehicleModel = e.target.value;
-        updateGarageNotice();
-        state.currentPage = 1;
-        renderCatalog();
-      });
+      const onModelChange = (e) => {
+        window.handleGarageModelChange(e.target.value);
+      };
+      els.vehicleModelSelect.addEventListener('change', onModelChange);
+      els.vehicleModelSelect.addEventListener('input', onModelChange);
     }
 
     if (els.clearVehicleFilterBtn) {

@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=20261114-12" />
 </head>
 <body>
   <!-- Barra superior -->
@@ -240,8 +240,25 @@
                 <span class="step-num">1</span> Marca del Vehículo:
               </label>
               <div class="garage-select-wrapper">
-                <select id="vehicleBrandSelect" class="garage-select" aria-label="Selecciona la marca de tu vehículo">
-                  <option value="all">🚗 Todas las Marcas (Toyota, Chevrolet, Ford...)</option>
+                <select id="vehicleBrandSelect" class="garage-select" aria-label="Selecciona la marca de tu vehículo" onchange="window.handleGarageBrandChange && window.handleGarageBrandChange(this.value)">
+                  <option value="all">🚗 Todas las Marcas (Selecciona tu carro)</option>
+                  <option value="toyota">Toyota (207 repuestos)</option>
+                  <option value="chevrolet">Chevrolet / GM (144 repuestos)</option>
+                  <option value="ford">Ford (67 repuestos)</option>
+                  <option value="jeep">Jeep / Mopar (54 repuestos)</option>
+                  <option value="mitsubishi">Mitsubishi (45 repuestos)</option>
+                  <option value="mazda">Mazda (38 repuestos)</option>
+                  <option value="nissan">Nissan (32 repuestos)</option>
+                  <option value="hyundai">Hyundai (30 repuestos)</option>
+                  <option value="honda">Honda (25 repuestos)</option>
+                  <option value="volkswagen">Volkswagen (24 repuestos)</option>
+                  <option value="renault">Renault (18 repuestos)</option>
+                  <option value="suzuki">Suzuki (14 repuestos)</option>
+                  <option value="isuzu">Isuzu (14 repuestos)</option>
+                  <option value="fiat">Fiat (12 repuestos)</option>
+                  <option value="peugeot">Peugeot (11 repuestos)</option>
+                  <option value="chery">Chery (8 repuestos)</option>
+                  <option value="caterpillar">Caterpillar / Diesel (8 repuestos)</option>
                 </select>
               </div>
             </div>
@@ -251,7 +268,7 @@
                 <span class="step-num">2</span> Modelo del Vehículo:
               </label>
               <div class="garage-select-wrapper">
-                <select id="vehicleModelSelect" class="garage-select" aria-label="Selecciona el modelo de tu vehículo" disabled>
+                <select id="vehicleModelSelect" class="garage-select" aria-label="Selecciona el modelo de tu vehículo" disabled onchange="window.handleGarageModelChange && window.handleGarageModelChange(this.value)">
                   <option value="all">🚘 Selecciona primero una marca arriba</option>
                 </select>
               </div>
@@ -805,9 +822,9 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <script src="data.js"></script>
-  <script src="vehicle-graphics.js"></script>
-  <script src="xlsx-importer.js"></script>
-  <script src="app.js"></script>
+  <script src="data.js?v=20261114-12"></script>
+  <script src="vehicle-graphics.js?v=20261114-12"></script>
+  <script src="xlsx-importer.js?v=20261114-12"></script>
+  <script src="app.js?v=20261114-12"></script>
 </body>
 </html>
