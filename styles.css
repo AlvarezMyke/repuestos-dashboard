@@ -2749,7 +2749,7 @@ html, body {
 }
 
 /* ==========================================================================
-   TASA OFICIAL BCV Y CALCULADORA DE PAGO M覸IL
+   TASA OFICIAL BCV Y CALCULADORA DE PAGO M脫VIL
    ========================================================================== */
 .bcv-ticker-bar {
   background: var(--bg-surface);
@@ -2865,7 +2865,7 @@ html, body {
   transform: rotate(45deg);
 }
 
-/* Indicador de Bol韛ares en tarjetas */
+/* Indicador de Bol铆vares en tarjetas */
 .price-bcv {
   display: block;
   font-size: 0.72rem;
@@ -2895,7 +2895,7 @@ html, body {
   font-size: 0.92rem;
 }
 
-/* Fila de Bol韛ares en Carrito */
+/* Fila de Bol铆vares en Carrito */
 .bcv-cart-row {
   background: var(--bg-body);
   padding: 8px 10px;
@@ -2904,15 +2904,37 @@ html, body {
   border-left: 3px solid var(--accent);
 }
 
-/* Modal Pago M髒il */
+/* Modal Pago M贸vil */
 .modal-pago-movil {
-  max-width: 540px !important;
-  width: 100%;
+  max-width: 520px !important;
+  width: 95% !important;
+  max-height: 92vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+.modal-pago-movil .modal-header {
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 14px 18px !important;
+  background: var(--bg-surface) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
 }
 
 .pago-movil-badge-icon {
   font-size: 1.4rem;
   margin-right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-header-brand {
@@ -2923,10 +2945,19 @@ html, body {
 .pago-movil-modal-body {
   display: flex !important;
   flex-direction: column !important;
-  gap: 14px !important;
-  padding: 16px 20px !important;
-  max-height: 80vh;
-  overflow-y: auto;
+  gap: 16px !important;
+  padding: 16px 18px 28px !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  flex: 1 1 auto !important;
+  max-height: none !important;
+}
+
+/* Evitar compresi贸n flexbox en m贸viles: todas las tarjetas ocupan su altura natural */
+.pago-movil-modal-body > * {
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .bcv-status-card {
@@ -3085,151 +3116,168 @@ html, body {
   border-color: var(--accent);
 }
 
-/* Tarjeta Bancaria Pago M髒il */
+/* Tarjeta Bancaria Pago M贸vil */
 .bank-card {
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  color: #f8fafc;
-  border-radius: var(--radius-md);
-  padding: 16px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-  position: relative;
-  overflow: hidden;
+  background: linear-gradient(135deg, #0f172a, #1e293b) !important;
+  color: #f8fafc !important;
+  border-radius: var(--radius-md) !important;
+  padding: 16px 18px !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+  position: relative !important;
+  overflow: visible !important;
+  min-height: fit-content !important;
+  flex-shrink: 0 !important;
 }
 
 .bank-card::after {
   content: '';
   position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 140px;
-  height: 140px;
+  top: -30px;
+  right: -30px;
+  width: 120px;
+  height: 120px;
   background: radial-gradient(circle, rgba(2, 132, 199, 0.35) 0%, transparent 70%);
   pointer-events: none;
+  border-radius: 50%;
 }
 
 .bank-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 12px !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
 .bank-logo-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
 }
 
 .bank-chip {
-  width: 28px;
-  height: 20px;
-  background: linear-gradient(135deg, #fbbf24, #d97706);
-  border-radius: 4px;
-  position: relative;
+  width: 28px !important;
+  height: 20px !important;
+  background: linear-gradient(135deg, #fbbf24, #d97706) !important;
+  border-radius: 4px !important;
+  position: relative !important;
+  flex-shrink: 0 !important;
 }
 
 .bank-logo-title strong {
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  color: #e2e8f0;
+  font-size: 0.82rem !important;
+  letter-spacing: 0.08em !important;
+  color: #e2e8f0 !important;
 }
 
 .bank-badge-active {
-  background: rgba(16, 185, 129, 0.2);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.4);
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 2px 8px;
-  border-radius: 999px;
-  text-transform: uppercase;
+  background: rgba(16, 185, 129, 0.2) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+  font-size: 0.65rem !important;
+  font-weight: 800 !important;
+  padding: 3px 8px !important;
+  border-radius: 999px !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
 }
 
 .bank-card-details {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  margin-top: 10px !important;
+  width: 100% !important;
 }
 
 .bank-detail-item {
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
 }
 
 .bank-copyable-item {
   flex-direction: row !important;
-  align-items: center;
-  justify-content: space-between;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  padding: 8px 12px !important;
+  border-radius: var(--radius-sm) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
 .bank-detail-label {
-  font-size: 0.65rem;
-  letter-spacing: 0.06em;
-  color: #94a3b8;
-  font-weight: 700;
+  font-size: 0.65rem !important;
+  letter-spacing: 0.06em !important;
+  color: #94a3b8 !important;
+  font-weight: 700 !important;
+  display: block !important;
+  margin-bottom: 2px !important;
 }
 
 .bank-detail-value {
-  font-size: 0.95rem;
-  color: #ffffff;
-  font-weight: 700;
+  font-size: 0.95rem !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
 }
 
 .bank-detail-value.mono {
-  font-family: var(--font-mono);
-  letter-spacing: 0.04em;
-  font-size: 1.05rem;
-  color: #38bdf8;
+  font-family: var(--font-mono) !important;
+  letter-spacing: 0.04em !important;
+  font-size: 1.12rem !important;
+  color: #38bdf8 !important;
 }
 
 .btn-copy-sm {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.14s ease;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  padding: 6px 12px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  transition: all 0.14s ease !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
 }
 
-.btn-copy-sm:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: #ffffff;
-  transform: translateY(-1px);
+.btn-copy-sm:hover, .btn-copy-sm:active {
+  background: rgba(255, 255, 255, 0.28) !important;
+  border-color: #ffffff !important;
+  transform: translateY(-1px) !important;
 }
 
 .bank-card-actions {
-  margin-top: 14px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin-top: 14px !important;
+  padding-top: 10px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
 .btn-copy-all {
-  width: 100%;
-  background: #0284c7;
-  color: #ffffff;
-  border: none;
-  font-size: 0.8rem;
-  font-weight: 800;
-  padding: 8px 12px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all 0.14s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+  width: 100% !important;
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-size: 0.85rem !important;
+  font-weight: 800 !important;
+  padding: 10px 14px !important;
+  border-radius: var(--radius-sm) !important;
+  cursor: pointer !important;
+  transition: all 0.14s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
 }
 
-.btn-copy-all:hover {
-  background: #0369a1;
+.btn-copy-all:hover, .btn-copy-all:active {
+  background: #0369a1 !important;
 }
 
-/* Informaci髇 de Log韘tica */
+/* Informaci贸n de Log铆stica */
 .store-logistics-box {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
@@ -3259,7 +3307,7 @@ html, body {
   margin-right: 4px;
 }
 
-/* Adaptaci髇 m髒il del Ticker y Calculadora */
+/* Adaptaci贸n m贸vil del Ticker y Calculadora */
 @media (max-width: 768px) {
   .bcv-ticker-bar {
     padding: 6px 10px !important;
@@ -3294,7 +3342,7 @@ html, body {
 }
 
 /* ==========================================================================
-   TARJETA DE RESCATE CUANDO UN REPUESTO NO APARECE EN B赟QUEDA
+   TARJETA DE RESCATE CUANDO UN REPUESTO NO APARECE EN B脷SQUEDA
    ========================================================================== */
 .empty-state-rescue {
   background: var(--bg-surface);
@@ -3392,7 +3440,7 @@ html, body {
 }
 
 /* ==========================================================================
-   BOT覰 Y CAJA DE INSTALACI覰 PWA
+   BOT脫N Y CAJA DE INSTALACI脫N PWA
    ========================================================================== */
 .pwa-install-box {
   margin-top: 14px;
