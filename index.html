@@ -384,6 +384,7 @@
         <button class="admin-tab active" type="button" data-admin-tab="import">Importar Excel (.xlsx)</button>
         <button class="admin-tab" type="button" data-admin-tab="product">Agregar / Editar Producto</button>
         <button class="admin-tab" type="button" data-admin-tab="bcv">Tasa BCV & Pago Móvil</button>
+        <button class="admin-tab" type="button" data-admin-tab="quote">Presupuesto PDF</button>
         <button class="admin-tab" type="button" data-admin-tab="settings">Respaldo y Clave</button>
       </div>
 
@@ -498,6 +499,55 @@
 
             <div class="admin-actions-row form-span-2">
               <button class="btn-primary-full" type="submit">Guardar configuración de Pago Móvil</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Tab Presupuesto PDF -->
+        <div id="adminTabQuote" class="admin-tab-pane">
+          <form id="quoteConfigForm" class="admin-grid-form">
+            <h3 class="form-span-2" style="font-size: 0.95rem;">Personalización del Presupuesto Formal (PDF e Impresión)</h3>
+            <p class="admin-hint form-span-2">
+              Edita el membrete, RIF, tiempo de validez y teléfonos que aparecen automáticamente en las cotizaciones y presupuestos descargables en PDF.
+            </p>
+
+            <label class="form-field form-span-2">
+              <span>Nombre de la Empresa (Membrete) *</span>
+              <input id="adminQuoteCompanyName" type="text" required placeholder="Ej. REPUESTOS ELÉCTRICOS MJ S.A." />
+            </label>
+
+            <label class="form-field form-span-2">
+              <span>Subtítulo / Razón Social / Eslogan *</span>
+              <input id="adminQuoteSubtitle" type="text" required placeholder="Ej. Venta de Repuestos Automotrices Eléctricos Multimarca" />
+            </label>
+
+            <label class="form-field">
+              <span>RIF de la Empresa *</span>
+              <input id="adminQuoteRif" type="text" required placeholder="Ej. V-00000000" />
+            </label>
+
+            <label class="form-field">
+              <span>Ciudad / Ubicación *</span>
+              <input id="adminQuoteCity" type="text" required placeholder="Ej. Caracas, Venezuela" />
+            </label>
+
+            <label class="form-field">
+              <span>WhatsApp / Ventas Directas *</span>
+              <input id="adminQuotePhone" type="text" required placeholder="Ej. +58 416-7456111" />
+            </label>
+
+            <label class="form-field">
+              <span>Tiempo de Validez de la Oferta *</span>
+              <input id="adminQuoteValidity" type="text" required placeholder="Ej. 8 Horas" />
+            </label>
+
+            <label class="form-field form-span-2">
+              <span>Condiciones de Despacho y Envíos *</span>
+              <input id="adminQuoteDispatch" type="text" required placeholder="Ej. Envíos Nacionales MRW · ZOOM · TEALCA (Salida 2:10 PM) / Entregas en Caracas" />
+            </label>
+
+            <div class="admin-actions-row form-span-2">
+              <button class="btn-primary-full" type="submit">Guardar Datos del Presupuesto</button>
             </div>
           </form>
         </div>

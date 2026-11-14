@@ -8,7 +8,8 @@
     adminPass: 'autopartes_admin_pass',
     adminSession: 'autopartes_admin_session',
     bcvRate: 'autopartes_bcv_rate_v1',
-    pagoMovil: 'autopartes_pago_movil_v1'
+    pagoMovil: 'autopartes_pago_movil_v1',
+    quoteConfig: 'autopartes_quote_config_v1'
   };
 
   const DEFAULT_BCV_RATE = 911.62;
@@ -28,6 +29,25 @@
       }
     } catch {}
     return { rate: DEFAULT_BCV_RATE, date: 'Oficial' };
+  }
+
+  const DEFAULT_QUOTE_CONFIG = {
+    companyName: 'REPUESTOS ELÉCTRICOS MJ S.A.',
+    subtitle: 'Venta de Repuestos Automotrices Eléctricos Multimarca',
+    rif: 'V-00000000',
+    city: 'Caracas, Venezuela',
+    phone: '+58 416-7456111',
+    validity: '8 Horas',
+    dispatchNote: 'Envíos Nacionales MRW · ZOOM · TEALCA (Salida 2:10 PM) / Entregas en Caracas',
+    footerNote: 'Documento proforma emitido por Repuestos Eléctricos MJ S.A. a tasa oficial del Banco Central de Venezuela (BCV). Garantía de funcionamiento en todos nuestros repuestos.'
+  };
+
+  function loadQuoteConfig() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.quoteConfig);
+      if (saved) return { ...DEFAULT_QUOTE_CONFIG, ...JSON.parse(saved) };
+    } catch {}
+    return { ...DEFAULT_QUOTE_CONFIG };
   }
 
   function loadPagoMovilConfig() {
@@ -118,7 +138,8 @@
     vehicleModel: 'all',
     bcvRate: bcvConfig.rate,
     bcvDate: bcvConfig.date,
-    pagoMovil: loadPagoMovilConfig()
+    pagoMovil: loadPagoMovilConfig(),
+    quoteConfig: loadQuoteConfig()
   };
 
   const els = {
@@ -186,6 +207,15 @@
     adminTabImport: document.getElementById('adminTabImport'),
     adminTabProduct: document.getElementById('adminTabProduct'),
     adminTabBcv: document.getElementById('adminTabBcv'),
+    adminTabQuote: document.getElementById('adminTabQuote'),
+    quoteConfigForm: document.getElementById('quoteConfigForm'),
+    adminQuoteCompanyName: document.getElementById('adminQuoteCompanyName'),
+    adminQuoteSubtitle: document.getElementById('adminQuoteSubtitle'),
+    adminQuoteRif: document.getElementById('adminQuoteRif'),
+    adminQuoteCity: document.getElementById('adminQuoteCity'),
+    adminQuotePhone: document.getElementById('adminQuotePhone'),
+    adminQuoteValidity: document.getElementById('adminQuoteValidity'),
+    adminQuoteDispatch: document.getElementById('adminQuoteDispatch'),
     adminTabSettings: document.getElementById('adminTabSettings'),
     excelFileInput: document.getElementById('excelFileInput'),
     importModeSelect: document.getElementById('importModeSelect'),
@@ -541,6 +571,8 @@
     const timeFormatted = now.toLocaleTimeString('es-VE', { hour: '2-digit', minute: '2-digit' });
     const quoteNumber = 'COT-' + now.getFullYear() + pad(now.getMonth() + 1) + pad(now.getDate()) + '-' + Math.floor(1000 + Math.random() * 9000);
 
+    const cfg = state.quoteConfig || DEFAULT_QUOTE_CONFIG;
+
     let subtotalUsd = 0;
     let totalUsd = 0;
 
@@ -573,16 +605,16 @@
     els.quotePrintDocument.innerHTML = `
       <div class="quote-doc-header">
         <div class="quote-brand-box">
-          <h1>REPUESTOS ELÉCTRICOS MJ S.A.</h1>
-          <p><strong>Venta de Repuestos Automotrices Eléctricos Multimarca</strong></p>
-          <p>RIF: V-16658322 · Caracas, Venezuela</p>
-          <p>WhatsApp / Ventas Directas: +58 416-7456111</p>
+          <h1>${escapeHtml(cfg.companyName)}</h1>
+          <p><strong>${escapeHtml(cfg.subtitle)}</strong></p>
+          <p>RIF: ${escapeHtml(cfg.rif)} · ${escapeHtml(cfg.city)}</p>
+          <p>WhatsApp / Ventas Directas: ${escapeHtml(cfg.phone)}</p>
         </div>
         <div class="quote-meta-box">
           <span class="quote-doc-badge">PRESUPUESTO FORMAL</span>
           <div class="quote-meta-row"><strong>N° Control:</strong> ${quoteNumber}</div>
           <div class="quote-meta-row"><strong>Fecha:</strong> ${dateFormatted} · ${timeFormatted}</div>
-          <div class="quote-meta-row"><strong>Validez:</strong> 24 Horas</div>
+          <div class="quote-meta-row"><strong>Validez:</strong> ${escapeHtml(cfg.validity)}</div>
           <div class="quote-meta-row" style="color: #0284c7; font-weight: 700;"><strong>Tasa Oficial BCV:</strong> ${formatBs(state.bcvRate)} Bs/$</div>
         </div>
       </div>
@@ -592,7 +624,7 @@
           <strong>Atención a:</strong> Cliente Particular / Taller Mecánico
         </div>
         <div>
-          <strong>Despacho:</strong> Envíos Nacionales MRW · ZOOM · TEALCA (Salida 2:10 PM) / Entregas en Caracas
+          <strong>Despacho:</strong> ${escapeHtml(cfg.dispatchNote)}
         </div>
       </div>
 
@@ -638,7 +670,7 @@
       <div class="quote-bank-instructions">
         <p style="margin: 0 0 6px 0;"><strong>💳 DATOS OFICIALES PARA PAGO MÓVIL:</strong></p>
         <p style="margin: 2px 0;"><strong>Banco:</strong> ${state.pagoMovil.bank} · <strong>Teléfono:</strong> ${state.pagoMovil.phone} · <strong>Cédula/RIF:</strong> ${state.pagoMovil.idNumber} · <strong>Titular:</strong> ${state.pagoMovil.holder}</p>
-        <p style="margin: 4px 0 0 0; font-size: 0.73rem; color: #475569;">Para confirmar su pedido, envíe el comprobante de pago vía WhatsApp al <strong>+584167456111</strong> haciendo referencia al N° <strong>${quoteNumber}</strong>.</p>
+        <p style="margin: 4px 0 0 0; font-size: 0.73rem; color: #475569;">Para confirmar su pedido, envíe el comprobante de pago vía WhatsApp al <strong>${escapeHtml(cfg.phone)}</strong> haciendo referencia al N° <strong>${quoteNumber}</strong>.</p>
       </div>
 
       <div class="quote-doc-footer">
@@ -1627,7 +1659,20 @@ function refreshFilterControls() {
     els.adminTabImport.classList.toggle('active', tabName === 'import');
     els.adminTabProduct.classList.toggle('active', tabName === 'product');
     if (els.adminTabBcv) els.adminTabBcv.classList.toggle('active', tabName === 'bcv');
+    if (els.adminTabQuote) els.adminTabQuote.classList.toggle('active', tabName === 'quote');
     els.adminTabSettings.classList.toggle('active', tabName === 'settings');
+  }
+
+  
+  function updateQuoteAdminUI() {
+    const cfg = state.quoteConfig || DEFAULT_QUOTE_CONFIG;
+    if (els.adminQuoteCompanyName) els.adminQuoteCompanyName.value = cfg.companyName;
+    if (els.adminQuoteSubtitle) els.adminQuoteSubtitle.value = cfg.subtitle;
+    if (els.adminQuoteRif) els.adminQuoteRif.value = cfg.rif;
+    if (els.adminQuoteCity) els.adminQuoteCity.value = cfg.city;
+    if (els.adminQuotePhone) els.adminQuotePhone.value = cfg.phone;
+    if (els.adminQuoteValidity) els.adminQuoteValidity.value = cfg.validity;
+    if (els.adminQuoteDispatch) els.adminQuoteDispatch.value = cfg.dispatchNote;
   }
 
   function openAdminPanel(defaultTab = 'import') {
@@ -1636,6 +1681,7 @@ function refreshFilterControls() {
       return;
     }
     switchAdminTab(defaultTab);
+    updateQuoteAdminUI();
     els.adminPanelOverlay.classList.add('open');
   }
 
@@ -2322,6 +2368,26 @@ function refreshFilterControls() {
         renderCart();
         closeAdminPanel();
         showToast('Configuración de Tasa BCV y Pago Móvil guardada');
+      });
+    }
+
+    // Admin: Guardar configuración de datos del Presupuesto en PDF
+    if (els.quoteConfigForm) {
+      els.quoteConfigForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        state.quoteConfig = {
+          companyName: els.adminQuoteCompanyName.value.trim() || DEFAULT_QUOTE_CONFIG.companyName,
+          subtitle: els.adminQuoteSubtitle.value.trim() || DEFAULT_QUOTE_CONFIG.subtitle,
+          rif: els.adminQuoteRif.value.trim() || DEFAULT_QUOTE_CONFIG.rif,
+          city: els.adminQuoteCity.value.trim() || DEFAULT_QUOTE_CONFIG.city,
+          phone: els.adminQuotePhone.value.trim() || DEFAULT_QUOTE_CONFIG.phone,
+          validity: els.adminQuoteValidity.value.trim() || DEFAULT_QUOTE_CONFIG.validity,
+          dispatchNote: els.adminQuoteDispatch.value.trim() || DEFAULT_QUOTE_CONFIG.dispatchNote,
+          footerNote: DEFAULT_QUOTE_CONFIG.footerNote
+        };
+        localStorage.setItem(STORAGE_KEYS.quoteConfig, JSON.stringify(state.quoteConfig));
+        closeAdminPanel();
+        showToast('¡Datos del Presupuesto en PDF actualizados con éxito!');
       });
     }
 
