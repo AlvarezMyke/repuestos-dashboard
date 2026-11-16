@@ -1788,6 +1788,127 @@ function refreshFilterControls() {
     showToast('Archivo data.js descargado');
   }
 
+  
+  /* ==========================================================================
+     CONTROLADOR DEL CARRUSEL LATERAL DE PROPAGANDAS (SIDEBAR PROMO)
+     ========================================================================== */
+  function initSidebarPromoCarousel() {
+    const carousel = document.getElementById('sidebarPromoCarousel');
+    if (!carousel) return;
+
+    const slides = carousel.querySelectorAll('.promo-slide');
+    const dots = carousel.querySelectorAll('.promo-dot');
+    const prevBtn = document.getElementById('promoPrevBtn');
+    const nextBtn = document.getElementById('promoNextBtn');
+
+    if (!slides.length) return;
+
+    let currentIdx = 0;
+    let timer = null;
+    const ROTATION_DELAY = 4500; // 4.5 segundos entre cada propaganda
+
+    function showSlide(idx) {
+      currentIdx = (idx + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle('active', i === currentIdx));
+      dots.forEach((d, i) => d.classList.toggle('active', i === currentIdx));
+    }
+
+    function nextSlide() {
+      showSlide(currentIdx + 1);
+    }
+
+    function prevSlide() {
+      showSlide(currentIdx - 1);
+    }
+
+    function startAutoPlay() {
+      stopAutoPlay();
+      timer = setInterval(nextSlide, ROTATION_DELAY);
+    }
+
+    function stopAutoPlay() {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        nextSlide();
+        startAutoPlay();
+      });
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        prevSlide();
+        startAutoPlay();
+      });
+    }
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showSlide(i);
+        startAutoPlay();
+      });
+    });
+
+    // Pausar movimiento cuando el usuario pasa el mouse o interactúa en móvil
+    carousel.addEventListener('mouseenter', stopAutoPlay);
+    carousel.addEventListener('mouseleave', startAutoPlay);
+    carousel.addEventListener('touchstart', stopAutoPlay, { passive: true });
+    carousel.addEventListener('touchend', startAutoPlay, { passive: true });
+
+    // Acciones interactivas de los botones dentro de los banners
+    carousel.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-promo-action]');
+      if (!btn) return;
+
+      const action = btn.dataset.promoAction;
+
+      if (action === 'garage') {
+        const garageEl = document.getElementById('garageSelectorBar');
+        if (garageEl) {
+          garageEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          garageEl.classList.remove('garage-highlight-pulse');
+          void garageEl.offsetWidth;
+          garageEl.classList.add('garage-highlight-pulse');
+          setTimeout(() => {
+            if (els.vehicleBrandSelect) {
+              try { els.vehicleBrandSelect.focus(); } catch {}
+            }
+          }, 350);
+        }
+        if (window.innerWidth <= 860) {
+          els.sidebar.classList.remove('open');
+          if (els.sidebarBackdrop) els.sidebarBackdrop.classList.remove('open');
+        }
+      } else if (action === 'category') {
+        const catId = btn.dataset.category;
+        if (catId) {
+          state.category = catId;
+          state.currentPage = 1;
+          renderCategories();
+          renderCatalog();
+          const gridEl = document.getElementById('catalogGrid');
+          if (gridEl) {
+            gridEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          if (window.innerWidth <= 860) {
+            els.sidebar.classList.remove('open');
+            if (els.sidebarBackdrop) els.sidebarBackdrop.classList.remove('open');
+          }
+        }
+      }
+    });
+
+    startAutoPlay();
+  }
+
   function bindEvents() {
     els.menuToggleBtn.addEventListener('click', () => {
       const isOpen = els.sidebar.classList.toggle('open');
@@ -2411,7 +2532,32 @@ function refreshFilterControls() {
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      
+      if (els.pwaInstallBtn) {
+        els.pwaInstallBtn.classList.add('available');
+      }
+    });
+
+    if (els.pwaInstallBtn) {
+      els.pwaInstallBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) {
+          const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+          if (isIos) {
+            alert('Para instalar en iPhone o iPad: presiona el botón "Compartir" en Safari (icono con la flecha arriba) y selecciona "Añadir a la pantalla de inicio".');
+          } else {
+            showToast('Pulsa el menú de 3 puntos ⋮ en tu navegador y selecciona "Instalar aplicación"');
+          }
+          return;
+        }
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          showToast('¡Catálogo instalado con éxito en tu teléfono!');
+          if (els.pwaInstallBtn) els.pwaInstallBtn.classList.remove('available');
+        }
+        deferredPrompt = null;
+      });
+    }
+
     // Banner Hero Promocional: Clic para navegar y enfocar el Buscador de Vehículo
     if (els.heroBannerCard) {
       els.heroBannerCard.addEventListener('click', () => {
@@ -2447,34 +2593,11 @@ function refreshFilterControls() {
       els.heroBannerSection.style.display = state.showHeroBanner ? '' : 'none';
     }
 
-    if (els.pwaInstallBtn) {
-        els.pwaInstallBtn.classList.add('available');
-      }
-    });
-
-    if (els.pwaInstallBtn) {
-      els.pwaInstallBtn.addEventListener('click', async () => {
-        if (!deferredPrompt) {
-          const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-          if (isIos) {
-            alert('Para instalar en iPhone o iPad: presiona el botón "Compartir" en Safari (icono con la flecha arriba) y selecciona "Añadir a la pantalla de inicio".');
-          } else {
-            showToast('Pulsa el menú de 3 puntos ⋮ en tu navegador y selecciona "Instalar aplicación"');
-          }
-          return;
-        }
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          showToast('¡Catálogo instalado con éxito en tu teléfono!');
-          if (els.pwaInstallBtn) els.pwaInstallBtn.classList.remove('available');
-        }
-        deferredPrompt = null;
-      });
-    }
+    // Carrusel Lateral de Propagandas y Servicios (Sidebar Promo Carousel)
+    initSidebarPromoCarousel();
   }
 
-  // Registro del Service Worker para funcionamiento como App Móvil PWA
+    // Registro del Service Worker para funcionamiento como App Móvil PWA
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js').catch((err) => {

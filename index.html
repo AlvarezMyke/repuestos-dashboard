@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261114-14" />
+  <link rel="stylesheet" href="styles.css?v=20261116-01" />
 </head>
 <body>
   <!-- Barra superior -->
@@ -164,6 +164,99 @@
         </button>
         <span class="pwa-install-hint">Funciona rápido y sin descargar de Play Store</span>
       </div>
+
+      <!-- Carrusel Lateral de Banners y Propagandas -->
+      <section class="sidebar-promo-carousel" id="sidebarPromoCarousel" aria-label="Propagandas y Promociones Especiales">
+        <div class="sidebar-promo-header">
+          <div class="promo-header-tag">
+            <span class="promo-live-dot"></span>
+            <span>DESTACADOS & SERVICIOS</span>
+          </div>
+          <div class="sidebar-promo-arrows">
+            <button id="promoPrevBtn" class="promo-arrow-btn" type="button" aria-label="Anterior banner" title="Anterior">‹</button>
+            <button id="promoNextBtn" class="promo-arrow-btn" type="button" aria-label="Siguiente banner" title="Siguiente">›</button>
+          </div>
+        </div>
+
+        <div class="sidebar-promo-viewport" id="sidebarPromoViewport">
+          <div class="sidebar-promo-slides" id="sidebarPromoSlides">
+            <!-- Slide 1: Multimarca Eléctrico -->
+            <div class="promo-slide active" data-slide-index="0">
+              <div class="promo-card theme-electric">
+                <div class="promo-card-glow"></div>
+                <div class="promo-top-row">
+                  <span class="promo-pill">⚡ 100% GARANTIZADO</span>
+                  <span class="promo-slide-num">1 / 4</span>
+                </div>
+                <h3 class="promo-card-title">Toyota · Chevrolet · Ford · Jeep</h3>
+                <p class="promo-card-desc">Alternadores, motores de arranque y bobinas con prueba técnica de funcionamiento.</p>
+                <button class="promo-card-btn" type="button" data-promo-action="garage">
+                  <span>Buscar mi vehículo</span>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Slide 2: Sensores de Inyección -->
+            <div class="promo-slide" data-slide-index="1">
+              <div class="promo-card theme-sensor">
+                <div class="promo-card-glow"></div>
+                <div class="promo-top-row">
+                  <span class="promo-pill pill-emerald">🔌 INYECCIÓN</span>
+                  <span class="promo-slide-num">2 / 4</span>
+                </div>
+                <h3 class="promo-card-title">Sensores de Oxígeno & Mínimo IAC</h3>
+                <p class="promo-card-desc">Elimina fallas de aceleración y apaga la luz Check Engine con repuestos exactos.</p>
+                <button class="promo-card-btn" type="button" data-promo-action="category" data-category="sensores-de-oxigeno">
+                  <span>Ver Sensores de Oxígeno</span>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Slide 3: Envíos Nacionales -->
+            <div class="promo-slide" data-slide-index="2">
+              <div class="promo-card theme-shipping">
+                <div class="promo-card-glow"></div>
+                <div class="promo-top-row">
+                  <span class="promo-pill pill-amber">🚚 SALIDA 2:10 PM</span>
+                  <span class="promo-slide-num">3 / 4</span>
+                </div>
+                <h3 class="promo-card-title">Envíos MRW · ZOOM · TEALCA</h3>
+                <p class="promo-card-desc">Despachos diarios a toda Venezuela con guía de rastreo y embalaje protegido.</p>
+                <a class="promo-card-btn" href="https://wa.me/584167456111?text=Hola,%20quisiera%20consultar%20costo%20y%20tiempo%20de%20env%C3%ADo%20nacional" target="_blank" rel="noopener noreferrer">
+                  <span>Consultar Envíos</span>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <!-- Slide 4: Convenio Talleres -->
+            <div class="promo-slide" data-slide-index="3">
+              <div class="promo-card theme-workshop">
+                <div class="promo-card-glow"></div>
+                <div class="promo-top-row">
+                  <span class="promo-pill pill-purple">🔧 PRECIOS AL MAYOR</span>
+                  <span class="promo-slide-num">4 / 4</span>
+                </div>
+                <h3 class="promo-card-title">Talleres Mecánicos & Flotas</h3>
+                <p class="promo-card-desc">Descuentos especiales por volumen y presupuestos formales PDF en minutos.</p>
+                <a class="promo-card-btn" href="https://wa.me/584167456111?text=Hola,%20tengo%20un%20taller%20mec%C3%A1nico%20y%20deseo%20cotizar%20repuestos%20al%20mayor" target="_blank" rel="noopener noreferrer">
+                  <span>Cotizar al Mayor</span>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-promo-dots" id="sidebarPromoDots">
+          <button class="promo-dot active" type="button" data-dot="0" aria-label="Ir a propaganda 1"></button>
+          <button class="promo-dot" type="button" data-dot="1" aria-label="Ir a propaganda 2"></button>
+          <button class="promo-dot" type="button" data-dot="2" aria-label="Ir a propaganda 3"></button>
+          <button class="promo-dot" type="button" data-dot="3" aria-label="Ir a propaganda 4"></button>
+        </div>
+      </section>
     </aside>
 
     <div id="sidebarBackdrop" class="sidebar-backdrop" aria-hidden="true"></div>
@@ -907,9 +1000,9 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <script src="data.js?v=20261114-14"></script>
-  <script src="vehicle-graphics.js?v=20261114-14"></script>
-  <script src="xlsx-importer.js?v=20261114-14"></script>
-  <script src="app.js?v=20261114-14"></script>
+  <script src="data.js?v=20261116-01"></script>
+  <script src="vehicle-graphics.js?v=20261116-01"></script>
+  <script src="xlsx-importer.js?v=20261116-01"></script>
+  <script src="app.js?v=20261116-01"></script>
 </body>
 </html>
