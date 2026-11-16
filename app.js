@@ -1492,6 +1492,7 @@ ${shareUrl}`;
     const status = getStatusMeta(part);
     const icons = DEFAULT_DATA.PART_ICONS;
     const veh = window.VehicleGraphics.resolveVehicle(part);
+    const specs = resolveElectricalSpecs(part);
 
     els.modalBrandSku.textContent = `${part.brand.toUpperCase()} · N° DE PIEZA: ${part.partNumber}`;
     els.modalTitle.textContent = part.name;
