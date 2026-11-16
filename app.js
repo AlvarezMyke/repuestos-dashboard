@@ -172,6 +172,11 @@
     kpiOutOfStockCount: document.getElementById('kpiOutOfStockCount'),
     kpiAvgPrice: document.getElementById('kpiAvgPrice'),
     detailOverlay: document.getElementById('detailOverlay'),
+    warrantyModalOverlay: document.getElementById('warrantyModalOverlay'),
+    openWarrantyBtn: document.getElementById('openWarrantyBtn'),
+    openWarrantyBarBtn: document.getElementById('openWarrantyBarBtn'),
+    closeWarrantyModalBtn: document.getElementById('closeWarrantyModalBtn'),
+    closeWarrantyModalConfirmBtn: document.getElementById('closeWarrantyModalConfirmBtn'),
     closeModalBtn: document.getElementById('closeModalBtn'),
     modalBrandSku: document.getElementById('modalBrandSku'),
     modalTitle: document.getElementById('modalTitle'),
@@ -1229,7 +1234,6 @@ function refreshFilterControls() {
       functionType,
       testing,
       fitment: 'Instalación Plug & Play directa sin modificar arnés',
-      warranty: '3 Días de Garantía de Fábrica (con escáner)',
       dispatch: 'Inmediato en Caracas / 24-48h envíos MRW, ZOOM, TEALCA'
     };
   }
@@ -1391,7 +1395,7 @@ ${shareUrl}`;
       els.lightboxSpecsBox.innerHTML = `
         <span class="lightbox-spec-pill">⚡ ${escapeHtml(specs.voltage)}</span>
         <span class="lightbox-spec-pill">🔌 ${escapeHtml(specs.connector.split('(')[0].trim())}</span>
-        <span class="lightbox-spec-pill pill-green">🛡️ ${escapeHtml(specs.warranty)}</span>
+        
         <span class="lightbox-spec-pill">🚚 ${escapeHtml(specs.dispatch.split('/')[0].trim())}</span>
       `;
     }
@@ -1601,8 +1605,8 @@ ${shareUrl}`;
               <strong class="spec-val">${escapeHtml(specs.fitment)}</strong>
             </div>
             <div class="spec-chip">
-              <span class="spec-label">GARANTÍA Y DESPACHO</span>
-              <strong class="spec-val" style="color: #10b981;">🛡️ ${escapeHtml(specs.warranty)}</strong>
+              <span class="spec-label">DESPACHO Y ENVÍOS</span>
+              <strong class="spec-val">🚚 ${escapeHtml(specs.dispatch)}</strong>
             </div>
           </div>
         </div>
@@ -2031,6 +2035,22 @@ ${shareUrl}`;
   }
 
   
+  
+  /* ==========================================================================
+     VENTANA MODAL DE CONDICIONES OFICIALES DE GARANTÍA
+     ========================================================================== */
+  function openWarrantyModal() {
+    if (els.warrantyModalOverlay) {
+      els.warrantyModalOverlay.classList.add('open');
+    }
+  }
+
+  function closeWarrantyModal() {
+    if (els.warrantyModalOverlay) {
+      els.warrantyModalOverlay.classList.remove('open');
+    }
+  }
+
   /* ==========================================================================
      CONTROLADOR DEL CARRUSEL LATERAL DE PROPAGANDAS (SIDEBAR PROMO)
      ========================================================================== */
@@ -2336,6 +2356,28 @@ ${shareUrl}`;
         openDetailModal(Number(openTarget.dataset.openId));
       }
     });
+
+    
+    // Abrir y cerrar ventana de Condiciones de Garantía
+    if (els.openWarrantyBtn) {
+      els.openWarrantyBtn.addEventListener('click', openWarrantyModal);
+    }
+    if (els.openWarrantyBarBtn) {
+      els.openWarrantyBarBtn.addEventListener('click', openWarrantyModal);
+    }
+    if (els.closeWarrantyModalBtn) {
+      els.closeWarrantyModalBtn.addEventListener('click', closeWarrantyModal);
+    }
+    if (els.closeWarrantyModalConfirmBtn) {
+      els.closeWarrantyModalConfirmBtn.addEventListener('click', closeWarrantyModal);
+    }
+    if (els.warrantyModalOverlay) {
+      els.warrantyModalOverlay.addEventListener('click', (e) => {
+        if (e.target === els.warrantyModalOverlay) {
+          closeWarrantyModal();
+        }
+      });
+    }
 
     els.closeModalBtn.addEventListener('click', closeDetailModal);
     els.detailOverlay.addEventListener('click', (e) => {

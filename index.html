@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261116-05" />
+  <link rel="stylesheet" href="styles.css?v=20261116-07" />
 </head>
 <body>
   <!-- Barra superior -->
@@ -48,6 +48,11 @@
     <div class="topbar-actions">
       <button id="themeToggleBtn" class="icon-btn" type="button" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema">
         <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+
+      <button id="openWarrantyBtn" class="icon-btn warranty-top-btn" type="button" title="Ver Condiciones Oficiales de Garantía" aria-label="Ver Garantía">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="warranty-btn-label">GARANTÍA</span>
       </button>
 
       <button id="adminBtn" class="icon-btn admin-btn" type="button" title="Acceso Administrador">
@@ -93,6 +98,9 @@
       </div>
 
       <div class="bcv-bar-actions">
+        <button id="openWarrantyBarBtn" class="btn-bcv-action btn-bcv-warranty" type="button" title="Ver Condiciones Oficiales de Garantía">
+          <span>🛡️ GARANTÍA</span>
+        </button>
         <button id="openPagoMovilBtn" class="btn-bcv-action" type="button" title="Ver datos de Pago Móvil y Calculadora">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
           <span>Calculadora & Pago Móvil</span>
@@ -576,6 +584,76 @@
         </div>
       </section>
     </main>
+  </div>
+
+  <!-- Modal de Condiciones Oficiales de Garantía -->
+  <div id="warrantyModalOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="warrantyModalTitle">
+    <div class="modal modal-warranty">
+      <div class="modal-header">
+        <div>
+          <div class="part-sku">POLÍTICA COMERCIAL OFICIAL</div>
+          <h2 id="warrantyModalTitle" style="font-size: 1.15rem; font-weight: 800; margin-top: 2px;">"Condiciones de Garantía" 🛡️</h2>
+        </div>
+        <button id="closeWarrantyModalBtn" class="modal-close" type="button" aria-label="Cerrar garantía">✕</button>
+      </div>
+      <div class="modal-body modal-warranty-body">
+        <div class="warranty-modal-intro">
+          <p>Para resguardo de ambas partes y garantizar la máxima transparencia en la compra de sus repuestos automotrices, le invitamos a conocer nuestras normativas:</p>
+        </div>
+
+        <div class="warranty-modal-rules">
+          <div class="warranty-rule-item">
+            <span class="warranty-rule-emoji">⏱️</span>
+            <div class="warranty-rule-text">
+              <strong>Tiempo de Cobertura:</strong>
+              <p>La(s) pieza(s) cuentan con 3 días de Garantía a partir de la entrega personal o recepción de la encomienda.</p>
+            </div>
+          </div>
+
+          <div class="warranty-rule-item">
+            <span class="warranty-rule-emoji">⚙️</span>
+            <div class="warranty-rule-text">
+              <strong>Defecto de Fábrica:</strong>
+              <p>Se responderá la garantía únicamente por defecto de fábrica, no por mala manipulación, mala instalación ni cortocircuitos.</p>
+            </div>
+          </div>
+
+          <div class="warranty-rule-item">
+            <span class="warranty-rule-emoji">📦</span>
+            <div class="warranty-rule-text">
+              <strong>Estado de la Pieza y Envoltorio:</strong>
+              <p>Es indispensable que la(s) pieza(s) se encuentre en buen estado al igual que su caja y envoltorio original. De encontrarse llenas de aceite, sucias o rotas, no se responderá la garantía.</p>
+            </div>
+          </div>
+
+          <div class="warranty-rule-item">
+            <span class="warranty-rule-emoji">📟</span>
+            <div class="warranty-rule-text">
+              <strong>Comprobación Técnica con Escáner:</strong>
+              <p>Se necesitará un video o foto del escáner automotriz para verificar la falla de la pieza instalada en el vehículo.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="warranty-yellow-alert-box">
+          <span class="yellow-alert-icon">⚠️</span>
+          <div>
+            <span class="yellow-alert-title">NO HACEMOS DEVOLUCIÓN DE DINERO, SIN EXCEPCIONES.</span>
+            <p class="yellow-alert-sub">Se realiza cambio o reemplazo por pieza operativa previa verificación de las condiciones descritas.</p>
+          </div>
+        </div>
+
+        <div class="warranty-modal-footer-actions">
+          <a href="https://wa.me/584167456111?text=Hola,%20tengo%20una%20consulta%20sobre%20las%20Condiciones%20de%20Garant%C3%ADa" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-outline">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 1.67c2.2 0 4.26.86 5.82 2.41a8.17 8.17 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.44 0-2.85-.38-4.09-1.11l-.29-.17-3.04.8 1.15-2.96-.19-.3A8.156 8.156 0 0 1 3.8 11.91c0-4.54 3.7-8.24 8.25-8.24z"/></svg>
+            <span>Consultar por WhatsApp</span>
+          </a>
+          <button id="closeWarrantyModalConfirmBtn" type="button" class="btn-primary" style="padding: 10px 14px; font-size: 0.82rem; font-weight: 700;">
+            Entendido y De Acuerdo
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Modal de ficha del repuesto -->
@@ -1143,9 +1221,9 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <script src="data.js?v=20261116-05"></script>
-  <script src="vehicle-graphics.js?v=20261116-05"></script>
-  <script src="xlsx-importer.js?v=20261116-05"></script>
-  <script src="app.js?v=20261116-05"></script>
+  <script src="data.js?v=20261116-07"></script>
+  <script src="vehicle-graphics.js?v=20261116-07"></script>
+  <script src="xlsx-importer.js?v=20261116-07"></script>
+  <script src="app.js?v=20261116-07"></script>
 </body>
 </html>

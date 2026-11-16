@@ -4958,6 +4958,203 @@ html, body {
   transform: translateX(2px);
 }
 
+
+/* ==========================================================================
+   BOTONES DE GARANTÍA SUPERIOR Y MODAL DE CONDICIONES
+   ========================================================================== */
+.warranty-top-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #10b981 !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  padding: 6px 12px !important;
+  border-radius: var(--radius-sm) !important;
+  font-size: 0.8rem !important;
+  font-weight: 800 !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 38px;
+}
+
+[data-theme="dark"] .warranty-top-btn {
+  background: rgba(16, 185, 129, 0.16) !important;
+  border-color: rgba(16, 185, 129, 0.45) !important;
+  color: #34d399 !important;
+}
+
+.warranty-top-btn:hover {
+  background: #10b981 !important;
+  color: #ffffff !important;
+  border-color: #10b981 !important;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+  transform: translateY(-1px);
+}
+
+.warranty-btn-label {
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.btn-bcv-warranty {
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #10b981 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  font-weight: 800 !important;
+  padding: 5px 12px !important;
+  border-radius: 999px !important;
+  font-size: 0.78rem !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.btn-bcv-warranty:hover {
+  background: #10b981 !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.modal-warranty {
+  max-width: 580px;
+  width: 95%;
+}
+
+.modal-warranty-body {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px;
+  padding: 16px 20px 22px !important;
+}
+
+.warranty-modal-intro p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.warranty-modal-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.warranty-rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--bg-surface-soft, rgba(148, 163, 184, 0.06));
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 11px 14px;
+}
+
+.warranty-rule-emoji {
+  font-size: 1.25rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.warranty-rule-text strong {
+  display: block;
+  font-size: 0.86rem;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.warranty-rule-text p {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.warranty-yellow-alert-box {
+  background: #fef08a;
+  border: 2px solid #eab308;
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-shadow: 0 3px 12px rgba(234, 179, 8, 0.22);
+}
+
+[data-theme="dark"] .warranty-yellow-alert-box {
+  background: #422006;
+  border-color: #ca8a04;
+}
+
+.yellow-alert-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.yellow-alert-title {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: #713f12;
+}
+
+[data-theme="dark"] .yellow-alert-title {
+  color: #fef08a;
+}
+
+.yellow-alert-sub {
+  margin: 4px 0 0 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #854d0e;
+}
+
+[data-theme="dark"] .yellow-alert-sub {
+  color: #fde047;
+}
+
+.warranty-modal-footer-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+@media (max-width: 540px) {
+  .warranty-modal-footer-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+.btn-whatsapp-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(37, 211, 102, 0.1);
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  color: #25d366;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-whatsapp-outline:hover {
+  background: #25d366;
+  color: #ffffff;
+}
+
 /* Reglas de impresión limpias para PDF / Impresora */
 @media print {
   body * {
