@@ -1,4 +1,4 @@
-const CACHE_NAME = 'repuestos-mj-cache-v7';
+const CACHE_NAME = 'repuestos-mj-cache-v8';
 const STATIC_ASSETS = [
   './',
   './index.html',
