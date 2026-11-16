@@ -4602,6 +4602,362 @@ html, body {
   border-color: rgba(16, 185, 129, 0.28);
 }
 
+
+/* ==========================================================================
+   SECCIÓN DE GARANTÍAS ELÉCTRICAS Y PREGUNTAS FRECUENTES (FAQ)
+   ========================================================================== */
+.faq-warranty-section {
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border-color);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.faq-warranty-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 28px;
+}
+
+.faq-badge-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #0284c7;
+  background: rgba(2, 132, 199, 0.1);
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+
+[data-theme="dark"] .faq-badge-header {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.faq-section-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 6px 0;
+  letter-spacing: -0.02em;
+}
+
+.faq-section-subtitle {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.faq-warranty-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 22px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .faq-warranty-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tarjeta Oficial de Garantía */
+.warranty-card-main {
+  background: var(--bg-surface);
+  border: 2px solid rgba(56, 189, 248, 0.35);
+  border-radius: 14px;
+  padding: 22px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .warranty-card-main {
+  background: #090e18;
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.warranty-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.warranty-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #0284c7;
+}
+
+[data-theme="dark"] .warranty-stamp {
+  color: #38bdf8;
+}
+
+.warranty-days-badge {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);
+}
+
+.warranty-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 2px 0;
+  letter-spacing: 0.02em;
+}
+
+.warranty-subtitle {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin: 0 0 16px 0;
+}
+
+.warranty-rules-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.warranty-rules-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.rule-icon-box {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 6px;
+  background: rgba(56, 189, 248, 0.1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.rule-content p {
+  margin: 2px 0 0 0;
+}
+
+.rule-content strong {
+  color: var(--text-primary);
+}
+
+/* Recuadro de Alerta: NO HACEMOS DEVOLUCION DE DINERO */
+.warranty-no-refund-box {
+  background: #fef08a;
+  border: 2px solid #eab308;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #713f12;
+  box-shadow: 0 2px 8px rgba(234, 179, 8, 0.2);
+}
+
+[data-theme="dark"] .warranty-no-refund-box {
+  background: #422006;
+  border-color: #eab308;
+  color: #fef08a;
+}
+
+.no-refund-alert-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.no-refund-highlight {
+  display: block;
+  font-size: 0.86rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: #854d0e;
+}
+
+[data-theme="dark"] .no-refund-highlight {
+  color: #fef08a;
+}
+
+.no-refund-text p {
+  margin: 3px 0 0 0;
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+/* Acordeón de Preguntas Frecuentes */
+.faq-accordion-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.faq-accordion-header {
+  margin-bottom: 4px;
+}
+
+.faq-accordion-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 2px 0;
+}
+
+.faq-accordion-hint {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.faq-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.faq-item:hover {
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.faq-item.open {
+  border-color: #0284c7;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.08);
+}
+
+[data-theme="dark"] .faq-item.open {
+  border-color: #38bdf8;
+  box-shadow: 0 4px 16px rgba(56, 189, 248, 0.12);
+}
+
+.faq-question-btn {
+  width: 100%;
+  padding: 14px 16px;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  text-align: left;
+  user-select: none;
+}
+
+.faq-q-text {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.faq-item.open .faq-q-text {
+  color: #0284c7;
+}
+
+[data-theme="dark"] .faq-item.open .faq-q-text {
+  color: #38bdf8;
+}
+
+.faq-chevron {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  line-height: 1;
+}
+
+.faq-item.open .faq-chevron {
+  transform: rotate(180deg);
+  color: #0284c7;
+}
+
+[data-theme="dark"] .faq-item.open .faq-chevron {
+  color: #38bdf8;
+}
+
+.faq-answer-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s ease;
+  padding: 0 16px;
+}
+
+.faq-item.open .faq-answer-panel {
+  max-height: 300px;
+  padding: 0 16px 14px 16px;
+}
+
+.faq-answer-panel p {
+  margin: 0;
+  font-size: 0.81rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.faq-answer-panel strong {
+  color: var(--text-primary);
+}
+
+/* Enlace directo a Garantías en el menú lateral */
+.sidebar-warranty-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(2, 132, 199, 0.08);
+  border: 1px solid rgba(2, 132, 199, 0.22);
+  color: #0284c7;
+  padding: 8px 12px;
+  border-radius: 9px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-top: 2px;
+}
+
+[data-theme="dark"] .sidebar-warranty-link {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.25);
+  color: #38bdf8;
+}
+
+.sidebar-warranty-link:hover {
+  background: rgba(2, 132, 199, 0.18);
+  border-color: #0284c7;
+  transform: translateX(2px);
+}
+
 /* Reglas de impresión limpias para PDF / Impresora */
 @media print {
   body * {

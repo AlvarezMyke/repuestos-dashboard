@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261116-04" />
+  <link rel="stylesheet" href="styles.css?v=20261116-05" />
 </head>
 <body>
   <!-- Barra superior -->
@@ -164,6 +164,12 @@
         </button>
         <span class="pwa-install-hint">Funciona rápido y sin descargar de Play Store</span>
       </div>
+
+      <!-- Enlace directo a Garantías y FAQ -->
+      <a href="#faqWarrantySection" class="sidebar-warranty-link" id="sidebarWarrantyLink">
+        <span class="sw-icon">🛡️</span>
+        <span>Ver Condiciones de Garantía & FAQ</span>
+      </a>
 
       <!-- Carrusel Lateral de Banners y Propagandas -->
       <section class="sidebar-promo-carousel" id="sidebarPromoCarousel" aria-label="Propagandas y Promociones Especiales">
@@ -444,6 +450,131 @@
 
       <!-- Paginación -->
       <nav id="paginationBar" class="pagination-bar" aria-label="Paginación del catálogo"></nav>
+
+      <!-- Sección Oficial de Garantías Eléctricas y Preguntas Frecuentes (FAQ) -->
+      <section class="faq-warranty-section" id="faqWarrantySection" aria-label="Garantías Eléctricas y Preguntas Frecuentes">
+        <div class="faq-warranty-header">
+          <div class="faq-badge-header">
+            <span class="faq-icon-shield">🛡️</span>
+            <span>POLÍTICAS CLARAS & RESPALDO TÉCNICO</span>
+          </div>
+          <h2 class="faq-section-title">Garantías Eléctricas & Preguntas Frecuentes</h2>
+          <p class="faq-section-subtitle">Conoce nuestras condiciones oficiales de garantía de fábrica y resuelve tus dudas de compra en minutos.</p>
+        </div>
+
+        <div class="faq-warranty-layout">
+          <!-- Tarjeta Oficial de Garantía (Condiciones Físicas de la Tienda) -->
+          <article class="warranty-card-main">
+            <div class="warranty-card-top">
+              <div class="warranty-stamp">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>POLÍTICA DE TIENDA</span>
+              </div>
+              <span class="warranty-days-badge">⚡ 3 DÍAS DE GARANTÍA</span>
+            </div>
+
+            <h3 class="warranty-title">CONDICIONES DE GARANTÍA</h3>
+            <p class="warranty-subtitle">Repuestos Eléctricos MJ S.A. · RIF V-00000000 · Caracas, Venezuela</p>
+
+            <ul class="warranty-rules-list">
+              <li>
+                <div class="rule-icon-box">⏱️</div>
+                <div class="rule-content">
+                  <strong>Tiempo de Cobertura:</strong>
+                  <p>La(s) piezas cuentan con <strong>3 días de Garantía</strong> a partir de la entrega personal o recepción de la encomienda.</p>
+                </div>
+              </li>
+              <li>
+                <div class="rule-icon-box">⚙️</div>
+                <div class="rule-content">
+                  <strong>Defecto de Fábrica:</strong>
+                  <p>Se responderá la garantía por <strong>defecto de fábrica</strong>, no por mala manipulación de la pieza, sobrecarga eléctrica o mala instalación.</p>
+                </div>
+              </li>
+              <li>
+                <div class="rule-icon-box">📦</div>
+                <div class="rule-content">
+                  <strong>Estado de la Pieza y Envoltorio:</strong>
+                  <p>Es necesario que la(s) pieza(s) se encuentre en buen estado al igual que su <strong>caja y envoltorio original</strong>. De encontrarse llenas de aceite, sucias o rotas, <strong>no se responderá la garantía</strong>.</p>
+                </div>
+              </li>
+              <li>
+                <div class="rule-icon-box">📟</div>
+                <div class="rule-content">
+                  <strong>Comprobación Técnica con Escáner:</strong>
+                  <p>Se necesitará un <strong>video o foto del escáner automotriz</strong> para verificar la falla de la pieza instalada en el vehículo.</p>
+                </div>
+              </li>
+            </ul>
+
+            <div class="warranty-no-refund-box">
+              <span class="no-refund-alert-icon">⚠️</span>
+              <div class="no-refund-text">
+                <strong class="no-refund-highlight">NO HACEMOS DEVOLUCIÓN DE DINERO, SIN EXCEPCIONES.</strong>
+                <p>Se realiza el cambio o reemplazo por pieza operativa previa verificación de las condiciones descritas.</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Acordeón de Preguntas Frecuentes -->
+          <div class="faq-accordion-wrap">
+            <div class="faq-accordion-header">
+              <h3 class="faq-accordion-title">Preguntas Frecuentes (FAQ)</h3>
+              <span class="faq-accordion-hint">Haz clic en cada pregunta para ver la respuesta</span>
+            </div>
+
+            <div class="faq-item open" tabindex="0">
+              <button class="faq-question-btn" type="button" aria-expanded="true">
+                <span class="faq-q-text">1. ¿Qué debo hacer si mi repuesto eléctrico presenta falla?</span>
+                <span class="faq-chevron">▾</span>
+              </button>
+              <div class="faq-answer-panel">
+                <p>Dentro de los primeros <strong>3 días de garantía</strong>, comunícate a nuestro WhatsApp de atención <strong>+58 416-7456111</strong> enviando: foto o video del escáner automotriz que verifique el código de falla, junto a la pieza limpia en su caja y envoltorio original sin aceite ni quemaduras para coordinar el cambio.</p>
+              </div>
+            </div>
+
+            <div class="faq-item" tabindex="0">
+              <button class="faq-question-btn" type="button" aria-expanded="false">
+                <span class="faq-q-text">2. ¿Hacen entregas en Caracas y envíos nacionales?</span>
+                <span class="faq-chevron">▾</span>
+              </button>
+              <div class="faq-answer-panel">
+                <p><strong>Sí, todos los días hábiles.</strong> Ofrecemos retiro personal en Caracas y entregas por delivery. Para el resto de Venezuela, realizamos envíos nacionales por <strong>MRW, ZOOM y TEALCA</strong>. Las encomiendas salen a las <strong>2:10 PM</strong> con número de guía de rastreo inmediato.</p>
+              </div>
+            </div>
+
+            <div class="faq-item" tabindex="0">
+              <button class="faq-question-btn" type="button" aria-expanded="false">
+                <span class="faq-q-text">3. ¿Cuáles son los métodos de pago aceptados?</span>
+                <span class="faq-chevron">▾</span>
+              </button>
+              <div class="faq-answer-panel">
+                <p>Aceptamos <strong>Pago Móvil y Transferencias Bancarias</strong> en Bolívares a la tasa oficial del Banco Central de Venezuela (BCV) del día, Divisas en efectivo para retiros personales en Caracas y transferencias electrónicas Zelle.</p>
+              </div>
+            </div>
+
+            <div class="faq-item" tabindex="0">
+              <button class="faq-question-btn" type="button" aria-expanded="false">
+                <span class="faq-q-text">4. ¿Cómo sé si el repuesto le sirve exactamente a mi carro?</span>
+                <span class="faq-chevron">▾</span>
+              </button>
+              <div class="faq-answer-panel">
+                <p>Puedes filtrar por tu marca y modelo en la opción <em>"¿Qué carro tienes?"</em>. Si tienes dudas con el conector o código, pulsa el botón de <strong>WhatsApp</strong> en cualquier repuesto para enviarle la foto de tu pieza vieja a un asesor técnico que confirmará compatibilidad en minutos.</p>
+              </div>
+            </div>
+
+            <div class="faq-item" tabindex="0">
+              <button class="faq-question-btn" type="button" aria-expanded="false">
+                <span class="faq-q-text">5. ¿Emiten presupuesto formal para talleres y mecánicos?</span>
+                <span class="faq-chevron">▾</span>
+              </button>
+              <div class="faq-answer-panel">
+                <p><strong>Sí.</strong> Puedes agregar los repuestos que requieras al carrito y pulsar <strong>"Descargar Presupuesto en PDF"</strong>. El sistema genera un documento membretado formal con número de control, RIF, datos bancarios y <strong>validez de 8 horas</strong> a tasa BCV para la aprobación de tus clientes.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -1012,9 +1143,9 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <script src="data.js?v=20261116-04"></script>
-  <script src="vehicle-graphics.js?v=20261116-04"></script>
-  <script src="xlsx-importer.js?v=20261116-04"></script>
-  <script src="app.js?v=20261116-04"></script>
+  <script src="data.js?v=20261116-05"></script>
+  <script src="vehicle-graphics.js?v=20261116-05"></script>
+  <script src="xlsx-importer.js?v=20261116-05"></script>
+  <script src="app.js?v=20261116-05"></script>
 </body>
 </html>

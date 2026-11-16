@@ -1229,7 +1229,7 @@ function refreshFilterControls() {
       functionType,
       testing,
       fitment: 'Instalación Plug & Play directa sin modificar arnés',
-      warranty: 'Garantía técnica de encendido y funcionamiento',
+      warranty: '3 Días de Garantía de Fábrica (con escáner)',
       dispatch: 'Inmediato en Caracas / 24-48h envíos MRW, ZOOM, TEALCA'
     };
   }
@@ -2863,6 +2863,38 @@ ${shareUrl}`;
     // Inicializar estado del banner
     if (els.heroBannerSection) {
       els.heroBannerSection.style.display = state.showHeroBanner ? '' : 'none';
+    }
+
+    
+    // Acordeón de Preguntas Frecuentes (FAQ)
+    const faqContainer = document.getElementById('faqWarrantySection');
+    if (faqContainer) {
+      faqContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.faq-question-btn');
+        if (!btn) return;
+        const item = btn.closest('.faq-item');
+        if (!item) return;
+
+        const isOpen = item.classList.contains('open');
+        item.classList.toggle('open', !isOpen);
+        btn.setAttribute('aria-expanded', String(!isOpen));
+      });
+    }
+
+    // Scroll suave desde el enlace lateral de Garantías
+    const sidebarWarrantyLink = document.getElementById('sidebarWarrantyLink');
+    if (sidebarWarrantyLink) {
+      sidebarWarrantyLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        const sec = document.getElementById('faqWarrantySection');
+        if (sec) {
+          sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        if (window.innerWidth <= 860) {
+          els.sidebar.classList.remove('open');
+          if (els.sidebarBackdrop) els.sidebarBackdrop.classList.remove('open');
+        }
+      });
     }
 
     // Carrusel Lateral de Propagandas y Servicios (Sidebar Promo Carousel)
