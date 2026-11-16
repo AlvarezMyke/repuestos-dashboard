@@ -260,6 +260,7 @@
     lightboxPrice: document.getElementById('lightboxPrice'),
     lightboxPriceTax: document.getElementById('lightboxPriceTax'),
     lightboxStockBadge: document.getElementById('lightboxStockBadge'),
+    lightboxSpecsBox: document.getElementById('lightboxSpecsBox'),
     lightboxAddToCartBtn: document.getElementById('lightboxAddToCartBtn'),
     lightboxWhatsappBtn: document.getElementById('lightboxWhatsappBtn'),
     lightboxShareWhatsappBtn: document.getElementById('lightboxShareWhatsappBtn'),
@@ -1164,7 +1165,76 @@ function refreshFilterControls() {
     renderPagination(filtered.length);
   }
 
-    /* ==========================================================================
+      /* ==========================================================================
+     RESOLVER ESPECIFICACIONES TÉCNICAS ELÉCTRICAS SEGÚN CATEGORÍA Y REPUESTO
+     ========================================================================== */
+  function resolveElectricalSpecs(part) {
+    if (!part) return {};
+    const cat = (part.categoryName || part.category || '').toLowerCase();
+    const name = (part.name || '').toLowerCase();
+    const brand = (part.brand || '').toLowerCase();
+
+    const isDieselHeavy = brand.includes('caterpillar') || brand.includes('cummins') || brand.includes('iveco') || name.includes('diesel') || name.includes('camion');
+    const voltage = isDieselHeavy ? '12V / 24V Pesado' : '12V Automotriz';
+
+    let connector = 'Conector original sellado según N° OEM';
+    let functionType = 'Componente eléctrico automotriz especializado';
+    let testing = 'Prueba de continuidad y resistencia en banco';
+
+    if (cat.includes('oxigeno') || name.includes('oxigeno')) {
+      connector = 'Arnés alta temp. (3 o 4 cables con calefactor)';
+      functionType = 'Monitoreo de mezcla aire-combustible y ahorro';
+      testing = 'Sensor circonio con resistencia precalentadora probada';
+    } else if (cat.includes('iac') || name.includes('iac') || name.includes('minimo')) {
+      connector = 'Conector de 4 pines (motor paso a paso)';
+      functionType = 'Regulación de marcha mínima y estabilización de ralentí';
+      testing = 'Bobinado magnético y vástago calibrado para mínimo parejo';
+    } else if (cat.includes('abs') || name.includes('abs')) {
+      connector = 'Conector impermeable 2 pines con cable blindado';
+      functionType = 'Lectura de velocidad de rueda para frenado seguro';
+      testing = 'Sensor captor magnético inductivo probado en frecuencia';
+    } else if (cat.includes('detonacion') || name.includes('detonacion') || name.includes('knock')) {
+      connector = 'Conector 1 o 2 pines roscado al bloque motor';
+      functionType = 'Detección de pistoneo para ajuste del tiempo de encendido';
+      testing = 'Elemento piezoeléctrico de respuesta acústica calibrada';
+    } else if (cat.includes('ocv') || cat.includes('vvti') || name.includes('vvti')) {
+      connector = 'Conector 2 pines para solenoide de alta velocidad';
+      functionType = 'Control electrohidráulico de tiempo variable de válvulas';
+      testing = 'Bobina de solenoide y carrete interno con sello hermético';
+    } else if (name.includes('arranque') || name.includes('starter')) {
+      connector = 'Terminales positivo B+ y solenoide de encendido S';
+      functionType = 'Motor de arranque para encendido del motor a combustión';
+      testing = 'Prueba de torque de arranque y automático/bendix';
+    } else if (name.includes('alternador')) {
+      connector = 'Borne positivo B+, conector de regulador y testigo de batería';
+      functionType = 'Generación de corriente y recarga de batería en marcha';
+      testing = 'Prueba de carga y rectificación de diodos en banco';
+    } else if (name.includes('bobina')) {
+      connector = 'Conector primario 12V y salida de alta tensión de chispa';
+      functionType = 'Generación de chispa de alto voltaje para bujías';
+      testing = 'Resistencia primaria y secundaria para chispa de alta energía';
+    } else if (name.includes('temperatura') || cat.includes('temperatura')) {
+      connector = 'Conector 2 pines con cuerpo de bronce sellado';
+      functionType = 'Termistor NTC para electroventilador e indicación de tablero';
+      testing = 'Variación óhmica según temperatura comprobada';
+    } else if (name.includes('flujo') || name.includes('maf')) {
+      connector = 'Conector de 3 a 5 pines con sensor de aire';
+      functionType = 'Medición de masa de aire entrante al múltiple';
+      testing = 'Elemento sensor de hilo caliente calibrado';
+    }
+
+    return {
+      voltage,
+      connector,
+      functionType,
+      testing,
+      fitment: 'Instalación Plug & Play directa sin modificar arnés',
+      warranty: 'Garantía técnica de encendido y funcionamiento',
+      dispatch: 'Inmediato en Caracas / 24-48h envíos MRW, ZOOM, TEALCA'
+    };
+  }
+
+  /* ==========================================================================
      COMPARTIR REPUESTO POR WHATSAPP Y ENLACE DIRECTO
      ========================================================================== */
   function copyTextToClipboard(text) {
@@ -1315,6 +1385,16 @@ ${shareUrl}`;
     els.lightboxPriceTax.textContent = hasPrice ? `Total con IVA (16%): ${formatMoney(part.priceTotal)}` : '';
     els.lightboxStockBadge.className = `badge ${status.cls}`;
     els.lightboxStockBadge.textContent = status.label;
+
+    const specs = resolveElectricalSpecs(part);
+    if (els.lightboxSpecsBox) {
+      els.lightboxSpecsBox.innerHTML = `
+        <span class="lightbox-spec-pill">⚡ ${escapeHtml(specs.voltage)}</span>
+        <span class="lightbox-spec-pill">🔌 ${escapeHtml(specs.connector.split('(')[0].trim())}</span>
+        <span class="lightbox-spec-pill pill-green">🛡️ ${escapeHtml(specs.warranty)}</span>
+        <span class="lightbox-spec-pill">🚚 ${escapeHtml(specs.dispatch.split('/')[0].trim())}</span>
+      `;
+    }
 
     // Enlace de WhatsApp directo con el repuesto seleccionado
     const phone = '584167456111';
@@ -1492,6 +1572,40 @@ ${shareUrl}`;
             <tr><td>Costo de Venta (+16%)</td><td>${hasPrice ? formatMoney(part.priceTotal) : 'Consultar'}</td></tr>
           </tbody>
         </table>
+
+        <!-- Ficha Técnica Eléctrica -->
+        <div class="electrical-specs-card">
+          <div class="electrical-specs-title">
+            <span class="spec-bolt-icon">⚡</span>
+            <span>Especificaciones Técnicas Eléctricas</span>
+          </div>
+          <div class="electrical-specs-grid">
+            <div class="spec-chip">
+              <span class="spec-label">VOLTAJE NOMINAL</span>
+              <strong class="spec-val">⚡ ${escapeHtml(specs.voltage)}</strong>
+            </div>
+            <div class="spec-chip">
+              <span class="spec-label">TIPO DE CONECTOR</span>
+              <strong class="spec-val">🔌 ${escapeHtml(specs.connector)}</strong>
+            </div>
+            <div class="spec-chip">
+              <span class="spec-label">FUNCIÓN EN EL SISTEMA</span>
+              <strong class="spec-val">${escapeHtml(specs.functionType)}</strong>
+            </div>
+            <div class="spec-chip">
+              <span class="spec-label">CONTROL DE CALIDAD</span>
+              <strong class="spec-val">${escapeHtml(specs.testing)}</strong>
+            </div>
+            <div class="spec-chip">
+              <span class="spec-label">TIPO DE MONTAJE</span>
+              <strong class="spec-val">${escapeHtml(specs.fitment)}</strong>
+            </div>
+            <div class="spec-chip">
+              <span class="spec-label">GARANTÍA Y DESPACHO</span>
+              <strong class="spec-val" style="color: #10b981;">🛡️ ${escapeHtml(specs.warranty)}</strong>
+            </div>
+          </div>
+        </div>
       </div>
     `;
 
