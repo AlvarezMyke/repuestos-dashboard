@@ -173,7 +173,6 @@
     kpiAvgPrice: document.getElementById('kpiAvgPrice'),
     detailOverlay: document.getElementById('detailOverlay'),
     warrantyModalOverlay: document.getElementById('warrantyModalOverlay'),
-    openWarrantyBtn: document.getElementById('openWarrantyBtn'),
     openWarrantyBarBtn: document.getElementById('openWarrantyBarBtn'),
     closeWarrantyModalBtn: document.getElementById('closeWarrantyModalBtn'),
     closeWarrantyModalConfirmBtn: document.getElementById('closeWarrantyModalConfirmBtn'),
@@ -2360,9 +2359,6 @@ ${shareUrl}`;
 
     
     // Abrir y cerrar ventana de Condiciones de Garantía
-    if (els.openWarrantyBtn) {
-      els.openWarrantyBtn.addEventListener('click', openWarrantyModal);
-    }
     if (els.openWarrantyBarBtn) {
       els.openWarrantyBarBtn.addEventListener('click', openWarrantyModal);
     }
