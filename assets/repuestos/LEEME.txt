@@ -1,0 +1,19 @@
+CARPETA DE FOTOS DE REPUESTOS
+==================================
+
+¿CÓMO AGREGAR FOTOS A TUS REPUESTOS FÁCILMENTE?
+
+Para que un repuesto muestre su foto real en el catálogo y en el visor ampliado:
+
+1. Guarda la foto del repuesto con el NÚMERO DE PIEZA exacto que tiene en el catálogo.
+   Ejemplos:
+   - Para la pieza 89467-71020  ->  guarda la foto como: 89467-71020.jpg
+   - Para la pieza 90919-02244  ->  guarda la foto como: 90919-02244.jpg
+   - Para la pieza 22448-ED000  ->  guarda la foto como: 22448-ED000.jpg
+
+2. Coloca esa foto aquí adentro (en la carpeta assets/repuestos/).
+
+3. ¡Listo! La página web detecta automáticamente la foto según el número de pieza.
+   Si una pieza aún no tiene foto propia, mostrará automáticamente la foto o silueta del vehículo.
+
+Formato recomendado: JPG o PNG, fondo limpio o sobre el empaque original.
