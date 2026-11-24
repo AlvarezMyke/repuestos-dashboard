@@ -2862,18 +2862,28 @@ ${shareUrl}`;
       els.pwaInstallBtn.addEventListener('click', async () => {
         if (!deferredPrompt) {
           const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-          if (isIos) {
-            alert('Para instalar en iPhone/iPad: en Safari toca "Compartir" y luego "Agregar a pantalla de inicio".');
-          } else {
-            alert('Para instalar la app:\n\n1. Abre la pagina en Chrome o Edge por HTTPS.\n2. Espera a que cargue y prueba el boton nuevamente.\n3. Si el navegador ya cumple los criterios PWA, mostrara "Instalar app".\n\nEsta version ya incluye manifest, iconos 192/512 y service worker.');
-          }
+          const msg = isIos
+            ? 'Para instalar en iPhone/iPad: en Safari toca "Compartir" y luego "Agregar a pantalla de inicio".'
+            : 'Para instalar la app: abre esta pagina en Chrome o Edge por HTTPS. Si el navegador detecta la PWA, mostrara "Instalar app". Si solo ves "Agregar a pantalla de inicio", recarga la pagina, espera unos segundos y vuelve a intentar. Esta version ya incluye manifest, iconos 192/512 y service worker.';
+          showToast(isIos ? 'iPhone: Compartir > Agregar a pantalla de inicio' : 'Buscando opcion de instalacion...');
+          const box = document.createElement('div');
+          box.style.cssText='position:fixed;left:12px;right:12px;bottom:12px;z-index:99999;background:#18212d;color:#fff;padding:16px 18px;border-radius:16px;border:1px solid rgba(255,90,31,.45);box-shadow:0 18px 40px rgba(0,0,0,.45);font:600 14px/1.5 Plus Jakarta Sans,sans-serif';
+          box.innerHTML='<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start"><div>'+msg+'</div><button style="background:#ff5a1f;color:#fff;border:none;border-radius:10px;padding:8px 10px;font-weight:800;cursor:pointer">OK</button></div>';
+          box.querySelector('button').onclick=()=>box.remove();
+          document.body.appendChild(box);
+          setTimeout(()=>box.remove(),12000);
           return;
         }
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          showToast('Aplicacion instalada con exito');
-          if (els.pwaInstallBtn) els.pwaInstallBtn.style.display = 'none';
+        try {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            showToast('Aplicacion instalada con exito');
+            if (els.pwaInstallBtn) els.pwaInstallBtn.style.display = 'none';
+          }
+        } catch (err) {
+          console.warn('PWA install error', err);
+          showToast('No se pudo abrir el instalador. Usa el menu del navegador.');
         }
         deferredPrompt = null;
       });
