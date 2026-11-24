@@ -2962,3 +2962,32 @@ ${shareUrl}`;
   bindEvents();
   checkUrlDirectPart();
 })();
+
+// --- Interacción: reveal al hacer scroll (Opción C) ---
+(() => {
+  const initReveal = () => {
+    const targets = document.querySelectorAll('.kpi-card, .hero-banner-card, .sidebar-section, .catalog-toolbar, .bcv-ticker-bar');
+    targets.forEach((el, i) => { el.classList.add('reveal-on-scroll'); el.style.transitionDelay = Math.min(i * 60, 240) + 'ms'; });
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('reveal-visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    targets.forEach(el => obs.observe(el));
+    // Cards se renderizan dinámicamente; observar el contenedor
+    const catalog = document.getElementById('catalogContainer');
+    if (catalog) {
+      const cardObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('reveal-visible'); cardObs.unobserve(e.target); } });
+      }, { threshold: 0.08 });
+      const watchCards = () => {
+        catalog.querySelectorAll('.part-card:not(.reveal-on-scroll)').forEach((el, i) => {
+          el.classList.add('reveal-on-scroll');
+          el.style.transitionDelay = Math.min((i % 12) * 35, 280) + 'ms';
+          cardObs.observe(el);
+        });
+      };
+      watchCards();
+      new MutationObserver(watchCards).observe(catalog, { childList: true, subtree: true });
+    }
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initReveal); else initReveal();
+})();

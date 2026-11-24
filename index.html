@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>Repuestos Eléctricos Multimarcas MJ S.A. | Catálogo y Cotizaciones</title>
+  <title>Repuestos Eléctricos Multimarcas MJSA | Catálogo y Cotizaciones</title>
   
   <!-- PWA & Mobile Web App -->
   <link rel="manifest" href="manifest.webmanifest" />
@@ -21,6 +21,32 @@
   <link rel="stylesheet" href="styles.css?v=20261118-01" />
 </head>
 <body>
+  <!-- INTRO OPCI?N A -->
+  <div id="siteIntro" class="site-intro" aria-label="Introduccion">
+    <canvas id="introCanvas" class="site-intro-canvas"></canvas>
+    <div class="site-intro-grid"></div>
+    <div class="site-intro-overlay"></div>
+    <div id="introClock" class="site-intro-clock" aria-live="polite">
+      <div class="intro-clock-time">00:00:00</div>
+      <div class="intro-clock-date">--</div>
+    </div>
+    <div class="site-intro-content">
+      <div class="site-intro-kicker">Repuestos Electricos Multimarcas MJSA</div>
+      <h2 class="site-intro-title">
+        <span class="line">Potencia</span>
+        <span class="line">Tu Motor</span>
+        <span class="line">Sin Limites</span>
+      </h2>
+      <p class="site-intro-sub">Catalogo inteligente de repuestos electricos. Encuentra la pieza exacta, verifica compatibilidad y cotiza en segundos.</p>
+      <div class="site-intro-actions">
+        <button id="introEnterBtn" class="site-intro-btn primary" type="button">Entrar al Catalogo</button>
+      </div>
+    </div>
+    <div class="site-intro-meta"><span>Maykell Sarmiento</span><span>MJSA Performance</span></div>
+  </div>
+    <div class="site-intro-meta"><span>Mueve el cursor / toca la pantalla</span><span>MJ Performance</span></div>
+  </div>
+
   <!-- Barra superior -->
   <header class="topbar">
     <div class="topbar-left">
@@ -1220,5 +1246,36 @@
   <script src="vehicle-graphics.js?v=20261118-01"></script>
   <script src="xlsx-importer.js?v=20261118-01"></script>
   <script src="app.js?v=20261118-01"></script>
+
+<script>
+(() => {
+  const intro = document.getElementById('siteIntro');
+  if (!intro) return;
+  const skip = sessionStorage.getItem('mj_intro_seen') === '1';
+  let clockTimer;
+  const updateClock = () => {
+    const t=document.querySelector('#introClock .intro-clock-time');
+    const d=document.querySelector('#introClock .intro-clock-date');
+    if(!t||!d) return;
+    const now=new Date();
+    t.textContent=now.toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+    d.textContent=now.toLocaleDateString('es-VE',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  };
+  const hide = () => { if(clockTimer) clearInterval(clockTimer); intro.classList.add('hidden'); document.body.classList.remove('intro-open'); sessionStorage.setItem('mj_intro_seen','1'); setTimeout(()=>intro.remove(),650); };
+  if (skip) { intro.remove(); } else {
+    document.body.classList.add('intro-open');
+    updateClock(); clockTimer=setInterval(updateClock,1000);
+    ['introEnterBtn','introSkipBtn','introSkipBtn2'].forEach(id=>{const b=document.getElementById(id); if(b) b.addEventListener('click', hide);});
+    const c=document.getElementById('introCanvas'),x=c.getContext('2d');let w,h,dpr,pts=[],mouse={x:-9999,y:-9999};
+    function resize(){dpr=Math.min(devicePixelRatio||1,2);w=c.width=innerWidth*dpr;h=c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';pts=[];const gap=Math.max(28,Math.min(42,innerWidth/28));for(let y=0;y<h;y+=gap*dpr){for(let i=0;i<w;i+=gap*dpr){pts.push({x:i,y:y,ox:i,oy:y,vx:0,vy:0})}}}
+    function draw(){if(!document.getElementById('siteIntro')) return; x.clearRect(0,0,w,h);const mx=mouse.x*dpr,my=mouse.y*dpr;for(const p of pts){const dx=p.x-mx,dy=p.y-my,dist=Math.sqrt(dx*dx+dy*dy)||1,force=Math.max(0,180*dpr-dist);if(force>0){p.vx+=(dx/dist)*force*0.015;p.vy+=(dy/dist)*force*0.015}p.vx+=(p.ox-p.x)*0.035;p.vy+=(p.oy-p.y)*0.035;p.vx*=0.92;p.vy*=0.92;p.x+=p.vx;p.y+=p.vy;const d2=Math.sqrt((p.x-p.ox)**2+(p.y-p.oy)**2);const a=Math.min(0.9,0.12+d2/(90*dpr));x.fillStyle=d2>2?`rgba(255,${Math.floor(90+Math.min(120,d2))},31,${a})`:`rgba(120,140,165,0.25)`;x.beginPath();x.arc(p.x,p.y,d2>2?1.8*dpr:1.2*dpr,0,Math.PI*2);x.fill()}requestAnimationFrame(draw)}
+    const onMove=e=>{const t=e.touches?e.touches[0]:e; if(t){mouse.x=t.clientX;mouse.y=t.clientY}};
+    const onLeave=()=>{mouse.x=-9999;mouse.y=-9999};
+    addEventListener('resize',resize);addEventListener('mousemove',onMove);addEventListener('mouseleave',onLeave);addEventListener('touchmove',onMove,{passive:true});addEventListener('touchend',onLeave);
+    resize();draw();
+  }
+})();
+</script>
+
 </body>
 </html>
