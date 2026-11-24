@@ -5313,10 +5313,74 @@ html, body {
 .site-intro-meta{position:absolute;bottom:28px;left:28px;right:28px;display:flex;justify-content:space-between;gap:12px;z-index:3;font-family:var(--font-mono,monospace);font-size:.72rem;color:#7b8a9a;letter-spacing:.08em;text-transform:uppercase}
 @keyframes introRise{to{opacity:1;transform:translateY(0)}}
 body.intro-open{overflow:hidden}
-@media(max-width:640px){.site-intro-meta{font-size:.62rem;bottom:18px;left:16px;right:16px}.site-intro-skip{top:14px;right:14px;padding:8px 12px}}
-
 /* Intro clock */
 .site-intro-clock{position:absolute;top:22px;right:22px;z-index:3;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);color:#e2e8f0;padding:12px 16px;border-radius:14px;backdrop-filter:blur(8px);text-align:right;box-shadow:0 10px 30px rgba(0,0,0,.2)}
 .intro-clock-time{font-family:var(--font-mono,monospace);font-size:1.35rem;font-weight:700;letter-spacing:.04em;color:#fff;line-height:1}
 .intro-clock-date{margin-top:6px;font-size:.72rem;color:#ffb088;font-weight:700;letter-spacing:.04em;text-transform:capitalize}
-@media(max-width:640px){.site-intro-clock{top:14px;right:14px;padding:10px 12px}.intro-clock-time{font-size:1.1rem}.intro-clock-date{font-size:.66rem}}
+@media(max-width:640px){
+  .site-intro{align-items:flex-start;overflow-y:auto}
+  .site-intro-content{padding:110px 18px 90px;max-width:100%}
+  .site-intro-kicker{font-size:.62rem;letter-spacing:.2em;margin-bottom:16px}
+  .site-intro-title{font-size:clamp(2.6rem,13vw,4.4rem) !important;line-height:.92 !important}
+  .site-intro-sub{font-size:.92rem;line-height:1.6;margin-top:18px;padding:0 4px}
+  .site-intro-actions{margin-top:28px}
+  .site-intro-btn{width:100%;max-width:320px;padding:14px 20px}
+  .site-intro-meta{font-size:.62rem;bottom:16px;left:16px;right:16px;gap:8px}
+  .site-intro-clock{top:14px;right:14px;padding:10px 12px;border-radius:12px}
+  .intro-clock-time{font-size:1.05rem}.intro-clock-date{font-size:.62rem;max-width:170px}
+}
+@media(max-width:380px){
+  .site-intro-content{padding-top:102px}
+  .site-intro-title{font-size:clamp(2.2rem,12vw,3.4rem) !important}
+  .intro-clock-date{display:none}
+}
+
+
+/* ===================== MOBILE POLISH ===================== */
+html, body { max-width: 100%; overflow-x: hidden; }
+img, svg, video, canvas { max-width: 100%; }
+.topbar, .main, .sidebar, .modal-card, .drawer, .hero-banner-card, .kpi-card, .part-card { max-width: 100%; }
+@media (max-width: 768px) {
+  .main { padding: 16px 12px 36px !important; gap: 14px; }
+  .kpi-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: 10px; }
+  .kpi-card { padding: 14px 12px; border-radius: 16px; }
+  .kpi-value { font-size: 1.2rem; }
+  .kpi-label { font-size: .7rem; }
+  .kpi-sub { font-size: .66rem; }
+  .hero-banner-bar { padding: 12px 14px; gap: 10px; }
+  .hero-banner-pill { font-size: .76rem; line-height: 1.4; }
+  .hero-banner-cta { width: 100%; justify-content: center; }
+  .catalog-toolbar { gap: 10px; }
+  .results-info { font-size: .82rem; }
+  .parts-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: 10px; }
+  .part-card { border-radius: 16px; }
+  .part-visual { height: 150px; padding: 10px; }
+  .part-body { padding: 12px; gap: 8px; }
+  .part-title { font-size: .86rem; min-height: 2.8em; }
+  .part-meta { font-size: .68rem; }
+  .price-current { font-size: 1.1rem; }
+  .part-actions { width: 100%; }
+  .btn-detail, .btn-add { flex: 1; min-width: 0; padding: 0 8px; font-size: .74rem; height: 36px; }
+  .part-footer { flex-direction: column; align-items: stretch; gap: 10px; }
+  .modal-card { width: calc(100vw - 20px) !important; max-height: calc(100vh - 20px) !important; border-radius: 18px; }
+  .modal-header { padding: 14px 16px; }
+  .modal-body { padding: 16px; gap: 14px; }
+  .drawer { max-width: 100% !important; width: 100% !important; }
+  .lightbox-container { width: calc(100vw - 16px); height: calc(100vh - 16px); max-height: none; border-radius: 16px; }
+  .lightbox-header { padding: 12px 14px; }
+  .lightbox-footer { padding: 12px 14px; }
+  .admin-banner { padding: 10px 12px; }
+}
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr !important; }
+  .parts-grid { grid-template-columns: 1fr !important; }
+  .part-visual { height: 170px; }
+  .brand-text h1 { font-size: .72rem !important; max-width: 170px !important; }
+  .topbar { padding: 8px 10px 10px !important; }
+  .hero-banner-cta { font-size: .76rem; padding: 10px 14px; }
+}
+@media (max-width: 380px) {
+  .kpi-grid { grid-template-columns: 1fr !important; }
+  .topbar-actions .icon-btn { width: 30px !important; height: 30px !important; min-width: 30px !important; }
+  .whatsapp-top-btn { width: 34px !important; }
+}
