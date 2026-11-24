@@ -2838,32 +2838,42 @@ ${shareUrl}`;
       });
     }
 
-    // Evento de instalación PWA en el teléfono
+    // Evento de instalaci?n PWA en el tel?fono
     let deferredPrompt = null;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    if (isStandalone && els.pwaInstallBtn) {
+      els.pwaInstallBtn.style.display = 'none';
+      const hint = document.querySelector('.pwa-install-hint');
+      if (hint) hint.textContent = 'App instalada correctamente';
+    }
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      if (els.pwaInstallBtn) {
-        els.pwaInstallBtn.classList.add('available');
-      }
+      if (els.pwaInstallBtn) els.pwaInstallBtn.classList.add('available');
     });
-
+    window.addEventListener('appinstalled', () => {
+      deferredPrompt = null;
+      if (els.pwaInstallBtn) els.pwaInstallBtn.style.display = 'none';
+      const hint = document.querySelector('.pwa-install-hint');
+      if (hint) hint.textContent = 'App instalada correctamente';
+      showToast('Aplicacion instalada con exito');
+    });
     if (els.pwaInstallBtn) {
       els.pwaInstallBtn.addEventListener('click', async () => {
         if (!deferredPrompt) {
           const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
           if (isIos) {
-            alert('Para instalar en iPhone o iPad: presiona el botón "Compartir" en Safari (icono con la flecha arriba) y selecciona "Añadir a la pantalla de inicio".');
+            alert('Para instalar en iPhone/iPad: en Safari toca "Compartir" y luego "Agregar a pantalla de inicio".');
           } else {
-            showToast('Pulsa el menú de 3 puntos ⋮ en tu navegador y selecciona "Instalar aplicación"');
+            alert('Para instalar la app:\n\n1. Abre la pagina en Chrome o Edge por HTTPS.\n2. Espera a que cargue y prueba el boton nuevamente.\n3. Si el navegador ya cumple los criterios PWA, mostrara "Instalar app".\n\nEsta version ya incluye manifest, iconos 192/512 y service worker.');
           }
           return;
         }
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
         if (outcome === 'accepted') {
-          showToast('¡Catálogo instalado con éxito en tu teléfono!');
-          if (els.pwaInstallBtn) els.pwaInstallBtn.classList.remove('available');
+          showToast('Aplicacion instalada con exito');
+          if (els.pwaInstallBtn) els.pwaInstallBtn.style.display = 'none';
         }
         deferredPrompt = null;
       });
@@ -2963,7 +2973,7 @@ ${shareUrl}`;
   checkUrlDirectPart();
 })();
 
-// --- Interacci�n: reveal al hacer scroll (Opci�n C) ---
+// --- Interacci�n: reveal al hacer scroll (Opci�n C) ---
 (() => {
   const initReveal = () => {
     const targets = document.querySelectorAll('.kpi-card, .hero-banner-card, .sidebar-section, .catalog-toolbar, .bcv-ticker-bar');
@@ -2972,7 +2982,7 @@ ${shareUrl}`;
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('reveal-visible'); obs.unobserve(e.target); } });
     }, { threshold: 0.12 });
     targets.forEach(el => obs.observe(el));
-    // Cards se renderizan din�micamente; observar el contenedor
+    // Cards se renderizan din�micamente; observar el contenedor
     const catalog = document.getElementById('catalogContainer');
     if (catalog) {
       const cardObs = new IntersectionObserver((entries) => {

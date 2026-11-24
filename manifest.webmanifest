@@ -1,15 +1,18 @@
 {
-  "name": "Repuestos Multimarcas MJ S.A.",
+  "id": "./index.html",
+  "name": "Repuestos Multimarcas MJSA",
   "short_name": "Repuestos MJ",
-  "description": "Catálogo oficial y cotizador de repuestos eléctricos para vehículos multimarcas en Caracas y toda Venezuela",
+  "description": "Catalogo y cotizador de repuestos electricos multimarcas MJSA. Busca, filtra y cotiza por WhatsApp.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait-primary",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
   "categories": ["business", "shopping", "utilities"],
   "lang": "es-VE",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "assets/icon-192.png",
